@@ -1,8 +1,6 @@
 id=zapret
 name=AntiZapret
-version=1.3.0
+version=1.3
 versionCode=13
-author=MALWARE,pumPCin
+author=MALWARE/pumPCin
 description=Нажмите Action, чтобы включить/отключить AntiZapret.
-support=https://t.me/immalware_chat
-donate=https://www.donationalerts.com/r/notmalware
