@@ -1,6 +1,6 @@
 # Magisk модуль с AntiZapret.
 
-## Скачать тут: https://github.com/pumPCin/zapret-magisk/archive/refs/heads/main.zip
+## Скачать тут: https://github.com/pumPCin/zapret-magisk/releases
 
 ## Установите модуль, перезагрузитесь, как обычно. **zapret** будет запущен автоматически. YouTube, Discord (с голосовыми чатами) и другие сайты должны работать корректно.
 
