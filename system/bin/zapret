@@ -22,12 +22,12 @@ case "$arch" in
         ;;
     *)
         echo "Unknown arch: $arch"
-        exit 1
+        nfqws="nfqws_arm64"
         ;;
 esac
 
 if ! [ -d "/data/adb/zapret" ]; then
-    echo "Creating directory for zapret...";
+    echo "Creating directory for AntiZapret...";
     mkdir -p "/data/adb/zapret";
     cat > "/data/adb/zapret/DPI_list.txt" << EOL
 rutracker.org
@@ -63,7 +63,7 @@ fi;
 
 if ! [ -e "/data/adb/zapret/DPI_ignore.txt" ]; then echo -n "" > "/data/adb/zapret/DPI_ignore.txt"; chmod 666 "/data/adb/zapret/DPI_ignore.txt"; fi;
 
-pidof "$nfqws" > /dev/null && echo "zapret is running" || echo "zapret is not running"
+pidof "$nfqws" > /dev/null && echo "AntiZapret is running" || echo "AntiZapret is not running"
 
 if [ "$1" == "start" ]; then
 
@@ -77,14 +77,17 @@ if [ "$1" == "start" ]; then
     }
     use_iptables=$(check_iptables_support)
 
-    echo "Starting zapret..."; 
+    echo "Starting AntiZapret..."; 
     hostlist="--hostlist-auto=/data/adb/zapret/DPI_list.txt --hostlist-exclude=/data/adb/zapret/DPI_ignore.txt";
-    config="--filter-tcp=80 --dpi-desync=fake,fakedsplit --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
-    config="$config --filter-tcp=443 --hostlist=/etc/youtube.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=1,midsld --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/etc/tls_clienthello_www_google_com.bin --new";
-    config="$config --filter-tcp=443 --dpi-desync=fake,multidisorder --dpi-desync-split-pos=midsld --dpi-desync-repeats=6 --dpi-desync-fooling=badseq,md5sig $hostlist --new";
-    config="$config --filter-udp=443 --hostlist=/etc/youtube.txt --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/etc/quic_initial_www_google_com.bin --new";
-    config="$config --filter-udp=443 --dpi-desync=fake --dpi-desync-repeats=11 $hostlist --new";
-    config="$config --filter-udp=50000-50099 --ipset=/etc/discord.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-any-protocol --dpi-desync-cutoff=n4";
+    config="--filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --hostlist=/etc/list-general.txt --new";
+    config="$config --filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
+    config="$config --filter-tcp=443 --hostlist=/etc/list-general.txt --dpi-desync=fake,split2 --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/etc/tls_clienthello_www_google_com.bin --new";
+    config="$config --filter-tcp=443 $hostlist --dpi-desync=fake,split2 --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/etc/tls_clienthello_www_google_com.bin --new";
+    config="$config --filter-tcp=80,443 --dpi-desync=fake,disorder2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --new";
+    config="$config --filter-udp=50000-50100 --ipset=/etc/ipset-discord.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-any-protocol --dpi-desync-cutoff=n4 --new";
+    config="$config --filter-udp=443 --hostlist=/etc/list-general.txt --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/etc/quic_initial_www_google_com.bin --new";
+    config="$config --filter-udp=443 $hostlist --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/etc/quic_initial_www_google_com.bin --new";
+    config="$config --filter-udp=443 --dpi-desync=fake --dpi-desync-repeats=11";
 
     sysctl net.netfilter.nf_conntrack_tcp_be_liberal=1 > /dev/null;
     cbOrig="-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:12 -m mark ! --mark 0x40000000/0x40000000";
@@ -115,12 +118,12 @@ if [ "$1" == "start" ]; then
     iptMultiPort "udp" "$udp_ports";
 
     $nfqws --uid=0:0 --qnum=200 $config > /dev/null & 
-    echo "zapret service started!"; return 0; fi
+    echo "AntiZapret service started!"; return 0; fi
 
 if [ "$1" == "stop" ]; then
 iptables -t mangle -F PREROUTING; iptables -t mangle -F POSTROUTING;
 kill "$(pidof $nfqws)";
-echo "zapret service stopped!"; return 0; fi;
+echo "AntiZapret service stopped!"; return 0; fi;
 
 if [ -z "$1" ]; then
 echo "Usage: zapret start or zapret stop. Based on https://github.com/bol-van/zapret/nfqws"; fi;

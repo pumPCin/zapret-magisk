@@ -28,9 +28,9 @@ case "$arch" in
 esac
 
 if pidof "$nfqws" > /dev/null; then
-    echo "Stopping..."
+    echo "AntiZapret stopping..."
     zapret stop
 else
-    echo "Running..."
+    echo "AntiZapret running..."
     zapret start
 fi
