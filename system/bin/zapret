@@ -3,33 +3,178 @@ if ! [ -d "/data/adb/zapret" ]; then
     echo "Creating directory for AntiZapret...";
     mkdir -p "/data/adb/zapret";
     cat > "/data/adb/zapret/DPI_list.txt" << EOL
-rutracker.org
-ntc.party
-lolz.guru
-zelenka.guru
-x.com
-twitter.com
-twimg.com
-play.google.com
+10tv.app
+7tv.app
+7tv.gg
+7tv.io
+accounts.google.com
+ad.doubleclick.net
+adservice.google.com
+akamai.steamstatic.com
+aksor.pro
+amazon.com
+aniboom.one
+animego.org
+api.mod.io
+api.steampowered.com
+api.twitch.tv
+archive.org
+avatars.akamai.steamstatic.com
+bbc.com
+boom-img.com
+bootstrapcdn.com
+cdn.akamai.steamstatic.com
+cdn.betterttv.net
+cdn.discordapp.com
+cdn.frankerfacez.com
+cdn.hsmedia.ru
+cdn.vigo.one
+cdninstagram.com
+cdnjs.cloudflare.com
+clan.akamai.steamstatic.com
+cloud.kodik-storage.com
 cloudflare-ech.com
-torproject.org
-soundcloud.com
-amnezia.org
-matrix-client.matrix.org
-discord.com
-discord.gg
-discordapp.net
-discordapp.com
-discord.app
-discord.media
-discordcdn.com
-discord.dev
-discord.new
-discord.gift
-discordstatus.com
+cloudflare.com
+cloudflare.steamstatic.com
+cm.mgid.com
+code.jquery.com
+community.akamai.steamstatic.com
+dev.twitch.tv
+developer.valvesoftware.com
 dis.gd
-discord.co
+discord-activities.com
 discord-attachments-uploads-prd.storage.googleapis.com
+discord.app
+discord.co
+discord.com
+discord.design
+discord.dev
+discord.gg
+discord.gift
+discord.gifts
+discord.media
+discord.new
+discord.store
+discord.tools
+discordactivities.com
+discordapp.com
+discordapp.io
+discordapp.net
+discordcdn.com
+discordmerch.com
+discordpartygames.com
+discordsays.com
+discordstatus.com
+dn.com
+dns.comss.one
+dns.controld.com
+doubleclick.net
+dtf.ru
+en.wikipedia.org
+ext-twitch.tv
+facebook.com
+fandom.com
+fbcdn.net
+fburl.com
+fonts.googleapis.com
+gateway.discord.gg
+ggpht.com
+googleads.g.doubleclick.net
+googleadservices.com
+googleapis.com
+googlesyndication.com
+googletagmanager.com
+googleusercontent.com
+googlevideo.com
+gvt1.com
+help.steampowered.com
+help.twitch.tv
+holod.media
+i.ytimg.com
+id.twitch.tv
+imagedelivery.net
+images-ext-1.discordapp.net
+img.yani.tv
+indigogobot.com
+instagram.com
+jnn-pa.googleapis.com
+jquery.com
+jut.su
+kodik-storage.com
+kodik.biz
+kodik.info
+linkedin.com
+media.discordapp.net
+mod.io
+mullvad.net
+news.google.com
+nnmclub.to
+ntc.party
+pagead2.googlesyndication.com
+pbs.twimg.com
+pikabu.ru
+play.google.com
+player-aksor.yani.tv
+player.aksor.pro
+playerjs.com
+proton.me
+reddit.com
+relax.cloud.kodik-storage.com
+ru.linkedin.com
+ru.wikipedia.org
+rutracker.cc
+rutracker.org
+safeframe.googlesyndication.com
+shared.akamai.steamstatic.com
+shared.cloudflare.steamstatic.com
+soundcloud.com
+stackpath.bootstrapcdn.com
+static.doubleclick.net
+stats.g.doubleclick.net
+steamcommunity.com
+steamstatic.com
+store.akamai.steamstatic.com
+store.steampowered.com
+support.steampowered.com
+t.co
+t.me
+tenor.com
+torproject.org
+tpc.googlesyndication.com
+twimg.com
+twitch.tv
+twitchcdn.net
+twitter.com
+ufouxbwn.com
+vast.ufouxbwn.com
+video-ik-ok-ii.xyz
+video.akamai.steamstatic.com
+vidoomy.com
+vortex.data.microsoft.com
+web.archive.org
+wide-youtube.l.google.com
+wire.com
+x.com
+ya-ligh.com
+ya-ligt.com
+ya-liht.com
+yani.tv
+youtu.be
+youtube-nocookie.com
+youtube-ui.l.google.com
+youtube.com
+youtube.googleapis.com
+youtubeembeddedplayer.googleapis.com
+youtubei.googleapis.com
+youtubekids.com
+yt-video-upload.l.google.com
+yt.be
+yt3.ggpht.com
+yt4.ggpht.com
+ytimg.com
+ytimg.l.google.com
+yummy-anime.ru
+yummyani.me
 EOL
     chmod 666 "/data/adb/zapret/DPI_list.txt";
 fi;
@@ -52,15 +197,13 @@ if [ "$1" == "start" ]; then
 
     echo "Starting AntiZapret..."; 
     hostlist="--hostlist-auto=/data/adb/zapret/DPI_list.txt --hostlist-exclude=/data/adb/zapret/DPI_ignore.txt";
-    config="--filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --hostlist=/etc/list-general.txt --new";
-    config="$config --filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
-    config="$config --filter-tcp=443 --hostlist=/etc/list-general.txt --dpi-desync=fake,split2 --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/etc/tls_clienthello_www_google_com.bin --new";
+    config="--filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
     config="$config --filter-tcp=443 $hostlist --dpi-desync=fake,split2 --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/etc/tls_clienthello_www_google_com.bin --new";
     config="$config --filter-tcp=80,443 --dpi-desync=fake,disorder2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --new";
     config="$config --filter-udp=50000-50100 --ipset=/etc/ipset-discord.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-any-protocol --dpi-desync-cutoff=n4 --new";
-    config="$config --filter-udp=443 --hostlist=/etc/list-general.txt --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/etc/quic_initial_www_google_com.bin --new";
     config="$config --filter-udp=443 $hostlist --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/etc/quic_initial_www_google_com.bin --new";
     config="$config --filter-udp=443 --dpi-desync=fake --dpi-desync-repeats=11";
+
 
     sysctl net.netfilter.nf_conntrack_tcp_be_liberal=1 > /dev/null;
     cbOrig="-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:12 -m mark ! --mark 0x40000000/0x40000000";
