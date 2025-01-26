@@ -1,8 +1,8 @@
 #!/system/bin/sh
-if ! [ -d "/data/adb/zapret" ]; then
+if ! [ -d "/data/adb/antizapret" ]; then
     echo "Creating directory for AntiZapret...";
-    mkdir -p "/data/adb/zapret";
-    cat > "/data/adb/zapret/DPI_list.txt" << EOL
+    mkdir -p "/data/adb/antizapret";
+    cat > "/data/adb/antizapret/DPI_list.txt" << EOL
 10tv.app
 7tv.app
 7tv.gg
@@ -176,12 +176,10 @@ ytimg.l.google.com
 yummy-anime.ru
 yummyani.me
 EOL
-    chmod 666 "/data/adb/zapret/DPI_list.txt";
+    chmod 666 "/data/adb/antizapret/DPI_list.txt";
 fi;
 
-if ! [ -e "/data/adb/zapret/DPI_ignore.txt" ]; then echo -n "" > "/data/adb/zapret/DPI_ignore.txt"; chmod 666 "/data/adb/zapret/DPI_ignore.txt"; fi;
-
-pidof nfqws > /dev/null && echo "AntiZapret is running" || echo "AntiZapret is not running"
+if ! [ -e "/data/adb/antizapret/DPI_ignore.txt" ]; then echo -n "" > "/data/adb/antizapret/DPI_ignore.txt"; chmod 666 "/data/adb/antizapret/DPI_ignore.txt"; fi;
 
 if [ "$1" == "start" ]; then
 
@@ -196,14 +194,12 @@ if [ "$1" == "start" ]; then
     use_iptables=$(check_iptables_support)
 
     echo "Starting AntiZapret..."; 
-    hostlist="--hostlist-auto=/data/adb/zapret/DPI_list.txt --hostlist-exclude=/data/adb/zapret/DPI_ignore.txt";
+    hostlist="--hostlist-auto=/data/adb/antizapret/DPI_list.txt --hostlist-exclude=/data/adb/antizapret/DPI_ignore.txt";
     config="--filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
     config="$config --filter-tcp=443 $hostlist --dpi-desync=fake,split2 --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/etc/tls_clienthello_www_google_com.bin --new";
-    config="$config --filter-tcp=80,443 --dpi-desync=fake,disorder2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --new";
-    config="$config --filter-udp=50000-50100 $hostlist --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-any-protocol --dpi-desync-cutoff=n4 --new";
+    config="$config --filter-tcp=80,443 --dpi-desync=fake,disorder2 --dpi-desync-repeats=6 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
+    config="$config --filter-udp=50000-50100 --dpi-desync=fake --dpi-desync-any-protocol --dpi-desync-fake-quic=0xC30000000108 --new";
     config="$config --filter-udp=443 $hostlist --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/etc/quic_initial_www_google_com.bin --new";
-    config="$config --filter-udp=443 --dpi-desync=fake --dpi-desync-repeats=11";
-
 
     sysctl net.netfilter.nf_conntrack_tcp_be_liberal=1 > /dev/null;
     cbOrig="-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:12 -m mark ! --mark 0x40000000/0x40000000";
@@ -233,13 +229,13 @@ if [ "$1" == "start" ]; then
     iptMultiPort "tcp" "$tcp_ports";
     iptMultiPort "udp" "$udp_ports";
 
-    nfqws --uid=0:0 --qnum=200 $config > /dev/null & 
+    $nfqws --uid=0:0 --qnum=200 $config > /dev/null & 
     echo "AntiZapret service started!"; return 0; fi
 
 if [ "$1" == "stop" ]; then
 iptables -t mangle -F PREROUTING; iptables -t mangle -F POSTROUTING;
-kill "$(pidof nfqws)";
+kill "$(pidof $nfqws)";
 echo "AntiZapret service stopped!"; return 0; fi;
 
 if [ -z "$1" ]; then
-echo "Usage: zapret start or zapret stop. Based on https://github.com/bol-van/zapret/nfqws"; fi;
+echo "Usage: <antizapret start> or <antizapret stop>. Based on https://github.com/bol-van/antizapret/nfqws"; fi;
