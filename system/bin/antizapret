@@ -198,7 +198,7 @@ if [ "$1" == "start" ]; then
     config="--filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
     config="$config --filter-tcp=443 $hostlist --dpi-desync=fake,split2 --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/etc/tls_clienthello_www_google_com.bin --new";
     config="$config --filter-tcp=80,443 --dpi-desync=fake,disorder2 --dpi-desync-repeats=6 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig $hostlist --new";
-    config="$config --filter-udp=50000-50100 --dpi-desync=fake --dpi-desync-any-protocol --dpi-desync-fake-quic=0xC30000000108 --new";
+    config="$config --filter-udp=50000-59000 --dpi-desync=fake --dpi-desync-any-protocol --dpi-desync-fake-quic=0xC30000000108 --new";
     config="$config --filter-udp=443 $hostlist --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/etc/quic_initial_www_google_com.bin --new";
 
     sysctl net.netfilter.nf_conntrack_tcp_be_liberal=1 > /dev/null;
@@ -229,12 +229,12 @@ if [ "$1" == "start" ]; then
     iptMultiPort "tcp" "$tcp_ports";
     iptMultiPort "udp" "$udp_ports";
 
-    $nfqws --uid=0:0 --qnum=200 $config > /dev/null & 
+    nfqws --uid=0:0 --qnum=200 $config > /dev/null & 
     echo "AntiZapret service started!"; return 0; fi
 
 if [ "$1" == "stop" ]; then
 iptables -t mangle -F PREROUTING; iptables -t mangle -F POSTROUTING;
-kill "$(pidof $nfqws)";
+kill "$(pidof nfqws)";
 echo "AntiZapret service stopped!"; return 0; fi;
 
 if [ -z "$1" ]; then
