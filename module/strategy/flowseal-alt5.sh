@@ -1,5 +1,5 @@
 # Zapret Configuration
-# <-- -->
+# >.<
 
 config="--filter-l3=ipv4 --filter-tcp=443 --hostlist-exclude=$MODPATH/list/exclude.txt --ipset-exclude=$MODPATH/ipset/exclude.txt --dpi-desync=syndata,multidisorder --new"
 config="$config --filter-udp=443 --ipset=$MODPATH/ipset/ipset-v4.txt --ipset=$MODPATH/ipset/ipset-v6.txt --ipset=$MODPATH/ipset/custom.txt --ipset-exclude=$MODPATH/ipset/exclude.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=$MODPATH/fake/quic_initial_www_google_com.bin --new"
