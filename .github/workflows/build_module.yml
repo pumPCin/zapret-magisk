@@ -355,3 +355,10 @@ jobs:
           TELEGRAM_BOT_TOKEN_2: ${{ secrets.TELEGRAM_BOT_TOKEN_2 }}
           TELEGRAM_CHAT_ID_2: ${{ secrets.TELEGRAM_CHAT_ID_2 }}
           LINK_TO_CHANNEL: ${{ secrets.LINK_TO_CHANNEL }}
+
+      - name: Upload Module Zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: zapret-pocket
+          path: zapret-pocket.zip
+          if-no-files-found: error
