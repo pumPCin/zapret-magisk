@@ -17,29 +17,21 @@ remove_rules_by_pattern() {
     done
 }
 
-remove_rule_loop() {
-    local cmd="$1"
-    shift
-    while $cmd "$@" 2>/dev/null; do
-        :
-    done
-}
-
 remove_dnscrypt_rules() {
     for proto in udp tcp; do
-        remove_rule_loop iptables -t nat -D PREROUTING -p "$proto" --dport 53 -j DNAT --to-destination 127.0.0.1:5253
-        remove_rule_loop iptables -t nat -D OUTPUT -p "$proto" --dport 53 -j DNAT --to-destination 127.0.0.1:5253
-        remove_rule_loop iptables -t nat -D FORWARD -p "$proto" --dport 53 -j DNAT --to-destination 127.0.0.1:5253
+        remove_rules_by_pattern iptables nat PREROUTING "-p $proto --dport 53 -j DNAT --to-destination 127.0.0.1:5253"
+        remove_rules_by_pattern iptables nat OUTPUT "-p $proto --dport 53 -j DNAT --to-destination 127.0.0.1:5253"
+        remove_rules_by_pattern iptables nat FORWARD "-p $proto --dport 53 -j DNAT --to-destination 127.0.0.1:5253"
 
-        remove_rule_loop ip6tables -t nat -D PREROUTING -p "$proto" --dport 53 -j REDIRECT --to-ports 5253
-        remove_rule_loop ip6tables -t nat -D OUTPUT -p "$proto" --dport 53 -j REDIRECT --to-ports 5253
-        remove_rule_loop ip6tables -t nat -D FORWARD -p "$proto" --dport 53 -j REDIRECT --to-ports 5253
+        remove_rules_by_pattern ip6tables nat PREROUTING "-p $proto --dport 53 -j REDIRECT --to-ports 5253"
+        remove_rules_by_pattern ip6tables nat OUTPUT "-p $proto --dport 53 -j REDIRECT --to-ports 5253"
+        remove_rules_by_pattern ip6tables nat FORWARD "-p $proto --dport 53 -j REDIRECT --to-ports 5253"
 
-        remove_rule_loop iptables -t filter -D OUTPUT -p "$proto" --dport 853 -j DROP
-        remove_rule_loop iptables -t filter -D FORWARD -p "$proto" --dport 853 -j DROP
+        remove_rules_by_pattern iptables filter OUTPUT "--dport 853 -j DROP"
+        remove_rules_by_pattern iptables filter FORWARD "--dport 853 -j DROP"
 
-        remove_rule_loop ip6tables -t filter -D OUTPUT -p "$proto" --dport 853 -j DROP
-        remove_rule_loop ip6tables -t filter -D FORWARD -p "$proto" --dport 853 -j DROP
+        remove_rules_by_pattern ip6tables filter OUTPUT "--dport 853 -j DROP"
+        remove_rules_by_pattern ip6tables filter FORWARD "--dport 853 -j DROP"
     done
 }
 for pid in $PIDS_FROM_DIR; do
