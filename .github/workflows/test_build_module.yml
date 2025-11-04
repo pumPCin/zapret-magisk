@@ -1,5 +1,5 @@
-name: TEST Build Zapret Pocket
-run-name: 1000
+name: Test Build Zapret Pocket
+run-name: "1.0"
 
 on:
   workflow_dispatch:
@@ -277,8 +277,8 @@ jobs:
 
           echo "id=zapret" > module.prop
           echo "name=zapret" >> module.prop
-          echo "version=${version}" >> module.prop
-          echo "versionCode=${version_code}" >> module.prop
+          echo "version=Test build" >> module.prop
+          echo "versionCode=10" >> module.prop
           echo "author=sevcator, t.me/nigga2011, GAME-OVER-op, bol-van, DNSCrypt, ImMALWARE, Fenrir-0xFF, Flowseal, LeonMskRu" >> module.prop
           echo "description=⚡ DPI bypass on Android with additional features" >> module.prop
           echo "updateJson=https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/update.json" >> module.prop
