@@ -68,4 +68,3 @@ skip_incompatible = true
 [static]
 [static.'google']
 stamp = 'sdns://AgUAAAAAAAAABzguOC44LjggsKKKE4EwvtIbNjGjagI2607EdKSVHowYZtyvD9iPrkkHOC44LjguOAovZG5zLXF1ZXJ5'
-
