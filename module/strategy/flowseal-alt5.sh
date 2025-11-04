@@ -2,7 +2,7 @@
 # >.<
 
 config="--filter-l3=ipv4 --filter-tcp=443 --hostlist-exclude=$MODPATH/list/exclude.txt --ipset-exclude=$MODPATH/ipset/exclude.txt --dpi-desync=syndata,multidisorder --new"
-config="$config --filter-udp=443 --ipset=$MODPATH/ipset/ipset-v4.txt --ipset=$MODPATH/ipset/ipset-v6.txt --ipset=$MODPATH/ipset/custom.txt --ipset-exclude=$MODPATH/ipset/exclude.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=$MODPATH/fake/quic_initial_www_google_com.bin --new"
+config="$config --filter-udp=80,443 --ipset=$MODPATH/ipset/ipset-v4.txt --ipset=$MODPATH/ipset/ipset-v6.txt --ipset=$MODPATH/ipset/custom.txt --ipset-exclude=$MODPATH/ipset/exclude.txt --hostlist-exclude=$MODPATH/list/exclude.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=$MODPATH/fake/quic_initial_www_google_com.bin --new"
 config="$config --filter-udp=80,443 --hostlist=$MODPATH/list/default.txt --hostlist=$MODPATH/list/reestr.txt --hostlist=$MODPATH/list/custom.txt --hostlist-exclude=$MODPATH/list/exclude.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=$MODPATH/fake/quic_initial_www_google_com.bin --new"
 
 if [ "$(cat "$MODPATH/config/bypass-calls" 2>/dev/null || echo 0)" = "1" ]; then
