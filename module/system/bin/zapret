@@ -1,6 +1,25 @@
 MODPATH="/data/adb/modules/zapret"
 CURLPATH="$MODPATH/curl"
 
+download_with_curl() {
+    url="$1"
+    output="$2"
+
+    if [ -z "$url" ] || [ -z "$output" ]; then
+        return 1
+    fi
+
+    if [ -x "$CURLPATH" ]; then
+        "$CURLPATH" -fsSL -o "$output" "$url"
+        return $?
+    elif command -v curl >/dev/null 2>&1; then
+        curl -fsSL -o "$output" "$url"
+        return $?
+    fi
+
+    return 1
+}
+
 read_link_config() {
     default_value="$1"
     shift
@@ -72,6 +91,7 @@ command_info() {
     echo "  import-strategy - Import strategy from URL"
     echo "  cloaking  - Add/remove custom hosts"
     echo "  exclude  - Add/remove exclude list/ipset"
+    echo "  clear-dnscrypt-files - Clear DNSCrypt lists and refresh blocked IPs"
     return 0
 }
 
@@ -468,6 +488,35 @@ cloaking() {
     return 0
 }
 
+clear_dnscrypt_files() {
+    dnscrypt_dir="$MODPATH/dnscrypt"
+    blocked_ips_url="https://raw.githubusercontent.com/sevcator/zapret-pocket/refs/heads/main/module/dnscrypt/blocked-ips.txt"
+
+    mkdir -p "$dnscrypt_dir"
+
+    local status=0
+    for file in allowed-names.txt allowed-ips.txt cloaking-rules.txt blocked-names.txt; do
+        target="$dnscrypt_dir/$file"
+        if : > "$target"; then
+            echo "- Cleared $file"
+        else
+            echo "! Failed to clear $file"
+            status=1
+        fi
+    done
+
+    tmp_file="$dnscrypt_dir/blocked-ips.txt.tmp"
+    if download_with_curl "$blocked_ips_url" "$tmp_file"; then
+        mv "$tmp_file" "$dnscrypt_dir/blocked-ips.txt"
+        echo "- Updated blocked-ips.txt"
+        return $status
+    else
+        rm -f "$tmp_file"
+        echo "! Failed to update blocked-ips.txt"
+        return 1
+    fi
+}
+
 unknown_command() {
     echo "! Unknown command: $1"
     return 1
@@ -486,5 +535,6 @@ case "$1" in
     import-strategy) import_strategy "$2" ;;
     exclude)    exclude "$2" ;;
     cloaking)   cloaking "$2" "$3" ;;
+    clear-dnscrypt|clear-dnscrypt-files) clear_dnscrypt_files ;;
     *)          unknown_command "$1" ;;
 esac
