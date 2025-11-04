@@ -1088,6 +1088,9 @@ body.light-theme #error-overlay {
                 </span>
             </label>
         </div>
+        <div class="setting-item dnscrypt-related dnscrypt-dependent">
+            <button class="btn btn-full" data-i18n="clear_dnscrypt_files" id="btn-clear-dnscrypt">Очистить DNSCrypt файлы</button>
+        </div>
 </div>
 <h3 class="subsection-title" data-i18n="custom_links_title">Свои ссылки</h3>
 <div class="settings">
@@ -1247,6 +1250,7 @@ body.light-theme #error-overlay {
                 "dnscrypt_custom_blocked_ips": "Пользовательский blocked-ips.txt",
                 "dnscrypt_custom_allowed_names": "Пользовательский allowed-names.txt",
                 "dnscrypt_custom_allowed_ips": "Пользовательский allowed-ips.txt",
+                "clear_dnscrypt_files": "Очистить DNSCrypt файлы",
                 "line_counter": "Строк: {count}",
                 "btn_clear_title": "Очистить список",
                 "btn_save": "Сохранить",
@@ -1313,6 +1317,7 @@ body.light-theme #error-overlay {
                 "dnscrypt_custom_blocked_ips": "Custom blocked-ips.txt",
                 "dnscrypt_custom_allowed_names": "Custom allowed-names.txt",
                 "dnscrypt_custom_allowed_ips": "Custom allowed-ips.txt",
+                "clear_dnscrypt_files": "Clear DNSCrypt files",
                 "line_counter": "Lines: {count}",
                 "btn_clear_title": "Clear list",
                 "btn_save": "Save",
@@ -1470,6 +1475,7 @@ body.light-theme #error-overlay {
                 const btnPrimaryText = document.getElementById('btn-primary-text');
                 const strategySelect = document.getElementById('strategy-select');
                 const btnImportStrategy = document.getElementById('btn-import-strategy');
+                const btnClearDnscrypt = document.getElementById('btn-clear-dnscrypt');
                 const toggleDnscrypt = document.getElementById('toggle-dnscrypt');
                 const toggleIgnoreDnscrypt = document.getElementById('toggle-ignore-dnscrypt');
                 const toggleRulesRecheck = document.getElementById('toggle-rules-recheck');
@@ -1883,6 +1889,22 @@ btnPrimary.addEventListener('click', async () => {
                     importUrlInput.value = '';
                     importModalOverlay.classList.remove('hidden');
                     importUrlInput.focus();
+                });
+                btnClearDnscrypt.addEventListener('click', async () => {
+                    const originalText = btnClearDnscrypt.textContent;
+                    btnClearDnscrypt.disabled = true;
+                    btnClearDnscrypt.textContent = langData.loading || 'Загрузка...';
+                    try {
+                        await run(`/system/bin/zapret clear-dnscrypt-files`);
+                        await fetchData();
+                    } catch (e) {
+                        flashError();
+                        console.error(e);
+                    } finally {
+                        btnClearDnscrypt.disabled = false;
+                        btnClearDnscrypt.textContent = originalText;
+                        updateDnscryptDependentFields(toggleDnscrypt.checked, toggleIpv6.checked);
+                    }
                 });
                 importCancel.addEventListener('click', () => {
                     importModalOverlay.classList.add('hidden');
