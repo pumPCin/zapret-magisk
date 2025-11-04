@@ -828,7 +828,6 @@ body.light-theme #error-overlay {
                     <button class="list-btn" data-i18n="ipset_custom" data-tab="tab-ipset-custom">IPSet Custom</button>
                     <button class="list-btn" data-i18n="ipset_exclude" data-tab="tab-ipset-exclude">IPSet Exclude</button>
                     <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom" data-tab="tab-dnscrypt-custom">DNSCrypt Custom</button>
-                    <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_forwarding_rules" data-tab="tab-dnscrypt-forwarding-rules">DNSCrypt Forwarding Rules</button>
                     <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_blocked_names" data-tab="tab-dnscrypt-blocked-names">DNSCrypt Custom Blocked Names</button>
                     <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_blocked_ips" data-tab="tab-dnscrypt-blocked-ips">DNSCrypt Custom Blocked IPs</button>
                     <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_allowed_names" data-tab="tab-dnscrypt-allowed-names">DNSCrypt Custom Allowed Names</button>
@@ -908,21 +907,6 @@ body.light-theme #error-overlay {
 </svg>
 </button>
                         <button class="btn btn-save" data-dnscrypt-control="true" data-i18n="btn_save" data-path="dnscrypt/custom-cloaking-rules.txt">Сохранить</button>
-                    </div>
-                </div>
-                <div class="tab-content" data-dnscrypt-group="true" id="tab-dnscrypt-forwarding-rules">
-                    <textarea data-dnscrypt-control="true" id="file-dnscrypt-forwarding-rules" rows="10"></textarea>
-                    <div class="textarea-footer">
-                        <span class="line-counter" data-i18n-base="line_counter">
-                          Строк: 0
-                         </span>
-                        <button class="btn btn-icon btn-clear" data-dnscrypt-control="true" data-i18n-title="btn_clear_title" data-target="file-dnscrypt-forwarding-rules">
-                            <svg viewbox="0 0 24 24">
-                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
-                                </path>
-                            </svg>
-                        </button>
-                        <button class="btn btn-save" data-dnscrypt-control="true" data-i18n="btn_save" data-path="dnscrypt/custom-forwarding-rules.txt">Сохранить</button>
                     </div>
                 </div>
                 <div class="tab-content" data-dnscrypt-group="true" id="tab-dnscrypt-blocked-names">
@@ -1073,14 +1057,6 @@ body.light-theme #error-overlay {
             </label>
         </div>
         <div class="setting-item dnscrypt-related dnscrypt-dependent">
-            <label data-i18n="update_forwarding_rules">Forwarding Rules</label>
-            <label class="switch">
-                <input id="toggle-forwarding-rules-update" type="checkbox"/>
-                <span class="slider">
-                </span>
-            </label>
-        </div>
-        <div class="setting-item dnscrypt-related dnscrypt-dependent">
             <label data-i18n="update_allowed_names">Разрешенные домены</label>
             <label class="switch">
                 <input id="toggle-allowed-names-update" type="checkbox"/>
@@ -1130,11 +1106,7 @@ body.light-theme #error-overlay {
     <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
         <label data-i18n="cloaking_rules_link">Ссылка на Cloaking Rules</label>
         <input class="text-input" id="input-cloaking-rules" placeholder="https://example.github.io/cloaking-rules.txt" type="text"/>
-        <p class="input-hint" data-i18n="cloaking_rules_hint">Можно указывать ссылки на allowed-names.txt, allowed-ips.txt, blocked-ips.txt или forwarding-rules.txt.</p>
-    </div>
-    <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
-        <label data-i18n="forwarding_rules_link">Ссылка на Forwarding Rules</label>
-        <input class="text-input" id="input-forwarding-rules" placeholder="https://example.github.io/forwarding-rules.txt" type="text"/>
+        <p class="input-hint" data-i18n="cloaking_rules_hint">Можно указывать ссылки на allowed-names.txt, allowed-ips.txt или blocked-ips.txt.</p>
     </div>
     <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
         <label data-i18n="allowed_names_link">Ссылка на Allowed Names</label>
@@ -1271,7 +1243,6 @@ body.light-theme #error-overlay {
                 "ipset_custom": "IPSet Custom",
                 "ipset_exclude": "IPSet Exclude",
                 "dnscrypt_custom": "Пользовательский cloaking-rules.txt",
-                "dnscrypt_custom_forwarding_rules": "Пользовательский forwarding-rules.txt",
                 "dnscrypt_custom_blocked_names": "Пользовательский blocked-names.txt",
                 "dnscrypt_custom_blocked_ips": "Пользовательский blocked-ips.txt",
                 "dnscrypt_custom_allowed_names": "Пользовательский allowed-names.txt",
@@ -1293,7 +1264,6 @@ body.light-theme #error-overlay {
                 "update_on_start": "Обновление при запуске",
                 "update_cloaking": "Cloaking Rules",
                 "update_blocked_names": "Блокируемые домены",
-                "update_forwarding_rules": "Forwarding Rules",
                 "update_blocked_ips": "Блокируемые IP",
                 "update_allowed_names": "Разрешенные домены",
                 "update_allowed_ips": "Разрешенные IP",
@@ -1306,9 +1276,8 @@ body.light-theme #error-overlay {
                 "ipv6_ranges_link": "Ссылка на IPv6 диапазоны",
                 "registry_link": "Ссылка на реестр",
                 "cloaking_rules_link": "Ссылка на Cloaking Rules",
-                "cloaking_rules_hint": "Можно указывать ссылки на allowed-names.txt, allowed-ips.txt, blocked-ips.txt или forwarding-rules.txt.",
+                "cloaking_rules_hint": "Можно указывать ссылки на allowed-names.txt, allowed-ips.txt или blocked-ips.txt.",
                 "blocked_names_link": "Ссылка на Blocked Names",
-                "forwarding_rules_link": "Ссылка на Forwarding Rules",
                 "blocked_ips_link": "Ссылка на Blocked IPs",
                 "allowed_names_link": "Ссылка на Allowed Names",
                 "allowed_ips_link": "Ссылка на Allowed IPs",
@@ -1340,7 +1309,6 @@ body.light-theme #error-overlay {
                 "ipset_custom": "IPSet Custom",
                 "ipset_exclude": "IPSet Exclude",
                 "dnscrypt_custom": "Custom cloaking-rules.txt",
-                "dnscrypt_custom_forwarding_rules": "Custom forwarding-rules.txt",
                 "dnscrypt_custom_blocked_names": "Custom blocked-names.txt",
                 "dnscrypt_custom_blocked_ips": "Custom blocked-ips.txt",
                 "dnscrypt_custom_allowed_names": "Custom allowed-names.txt",
@@ -1362,7 +1330,6 @@ body.light-theme #error-overlay {
                 "update_on_start": "Update on startup",
                 "update_cloaking": "Cloaking Rules",
                 "update_blocked_names": "Blocked Names",
-                "update_forwarding_rules": "Forwarding Rules",
                 "update_blocked_ips": "Blocked IPs",
                 "update_allowed_names": "Allowed Names",
                 "update_allowed_ips": "Allowed IPs",
@@ -1375,9 +1342,8 @@ body.light-theme #error-overlay {
                 "ipv6_ranges_link": "IPv6 Ranges Link",
                 "registry_link": "Reestr Link",
                 "cloaking_rules_link": "Cloaking Rules Link",
-                "cloaking_rules_hint": "Links may end with allowed-names.txt, allowed-ips.txt, blocked-ips.txt, or forwarding-rules.txt.",
+                "cloaking_rules_hint": "Links may end with allowed-names.txt, allowed-ips.txt, or blocked-ips.txt.",
                 "blocked_names_link": "Blocked Names Link",
-                "forwarding_rules_link": "Forwarding Rules Link",
                 "blocked_ips_link": "Blocked IPs Link",
                 "allowed_names_link": "Allowed Names Link",
                 "allowed_ips_link": "Allowed IPs Link",
@@ -1510,7 +1476,6 @@ body.light-theme #error-overlay {
                 const toggleUpdateOnStart = document.getElementById('toggle-update-on-start');
                 const toggleCloakingUpdate = document.getElementById('toggle-cloaking-update');
                 const toggleBlockedNamesUpdate = document.getElementById('toggle-blocked-names-update');
-                const toggleForwardingRulesUpdate = document.getElementById('toggle-forwarding-rules-update');
                 const toggleBlockedIpsUpdate = document.getElementById('toggle-blocked-ips-update');
                 const toggleAllowedNamesUpdate = document.getElementById('toggle-allowed-names-update');
                 const toggleAllowedIpsUpdate = document.getElementById('toggle-allowed-ips-update');
@@ -1533,7 +1498,6 @@ body.light-theme #error-overlay {
                 const inputRknRegistry = document.getElementById('input-rkn-registry');
                 const inputCloakingRules = document.getElementById('input-cloaking-rules');
                 const inputBlockedNames = document.getElementById('input-blocked-names');
-                const inputForwardingRules = document.getElementById('input-forwarding-rules');
                 const inputBlockedIps = document.getElementById('input-blocked-ips');
                 const inputAllowedNames = document.getElementById('input-allowed-names');
                 const inputAllowedIps = document.getElementById('input-allowed-ips');
@@ -1543,7 +1507,6 @@ body.light-theme #error-overlay {
                 const linkTogglePairs = [
                     { configName: 'dnscrypt-cloaking-rules-update', toggle: toggleCloakingUpdate, input: inputCloakingRules, lastHasLink: false, defaultLink: DEFAULT_LINKS_BY_CONFIG['dnscrypt-cloaking-rules-update'] },
                     { configName: 'dnscrypt-blocked-names-update', toggle: toggleBlockedNamesUpdate, input: inputBlockedNames, lastHasLink: false, defaultLink: DEFAULT_LINKS_BY_CONFIG['dnscrypt-blocked-names-update'] },
-                    { configName: 'dnscrypt-forwarding-rules-update', toggle: toggleForwardingRulesUpdate, input: inputForwardingRules, lastHasLink: false },
                     { configName: 'dnscrypt-blocked-ips-update', toggle: toggleBlockedIpsUpdate, input: inputBlockedIps, lastHasLink: false, defaultLink: DEFAULT_LINKS_BY_CONFIG['dnscrypt-blocked-ips-update'] },
                     { configName: 'dnscrypt-allowed-names-update', toggle: toggleAllowedNamesUpdate, input: inputAllowedNames, lastHasLink: false },
                     { configName: 'dnscrypt-allowed-ips-update', toggle: toggleAllowedIpsUpdate, input: inputAllowedIps, lastHasLink: false }
@@ -1554,7 +1517,6 @@ body.light-theme #error-overlay {
                     'ipset/custom.txt': document.getElementById('file-ipset-custom'),
                     'ipset/exclude.txt': document.getElementById('file-ipset-exclude'),
                     'dnscrypt/custom-cloaking-rules.txt': document.getElementById('file-dnscrypt-custom'),
-                    'dnscrypt/custom-forwarding-rules.txt': document.getElementById('file-dnscrypt-forwarding-rules'),
                     'dnscrypt/custom-blocked-names.txt': document.getElementById('file-dnscrypt-blocked-names'),
                     'dnscrypt/custom-blocked-ips.txt': document.getElementById('file-dnscrypt-blocked-ips'),
                     'dnscrypt/custom-allowed-names.txt': document.getElementById('file-dnscrypt-allowed-names'),
@@ -1742,7 +1704,6 @@ body.light-theme #error-overlay {
                         const updateOnStart = await run(`cat ${MODPATH}/config/update-on-start 2>/dev/null || true`);
                         const cloakingUpdate = await run(`cat ${MODPATH}/config/dnscrypt-cloaking-rules-update 2>/dev/null || true`);
                         const blockedNamesUpdate = await run(`cat ${MODPATH}/config/dnscrypt-blocked-names-update 2>/dev/null || true`);
-                        const forwardingRulesUpdate = await run(`cat ${MODPATH}/config/dnscrypt-forwarding-rules-update 2>/dev/null || true`);
                         const blockedIpsUpdate = await run(`cat ${MODPATH}/config/dnscrypt-blocked-ips-update 2>/dev/null || true`);
                         const allowedNamesUpdate = await run(`cat ${MODPATH}/config/dnscrypt-allowed-names-update 2>/dev/null || true`);
                         const allowedIpsUpdate = await run(`cat ${MODPATH}/config/dnscrypt-allowed-ips-update 2>/dev/null || true`);
@@ -1754,7 +1715,6 @@ body.light-theme #error-overlay {
                         const rknRegistryLink = await run(`cat ${MODPATH}/config/reestr-link 2>/dev/null || cat ${MODPATH}/config/custom-rkn-registry-url 2>/dev/null || true`);
                         const cloakingRulesLink = await run(`cat ${MODPATH}/config/dnscrypt-cloaking-rules-link 2>/dev/null || cat ${MODPATH}/config/custom-cloaking-rules-url 2>/dev/null || true`);
                         const blockedNamesLink = await run(`cat ${MODPATH}/config/dnscrypt-blocked-names-link 2>/dev/null || cat ${MODPATH}/config/custom-blocked-names-url 2>/dev/null || true`);
-                        const forwardingRulesLink = await run(`cat ${MODPATH}/config/dnscrypt-forwarding-rules-link 2>/dev/null || cat ${MODPATH}/config/custom-forwarding-rules-url 2>/dev/null || true`);
                         const blockedIpsLink = await run(`cat ${MODPATH}/config/dnscrypt-blocked-ips-link 2>/dev/null || cat ${MODPATH}/config/custom-blocked-ips-url 2>/dev/null || true`);
                         const allowedNamesLink = await run(`cat ${MODPATH}/config/dnscrypt-allowed-names-link 2>/dev/null || cat ${MODPATH}/config/custom-allowed-names-url 2>/dev/null || true`);
                         const allowedIpsLink = await run(`cat ${MODPATH}/config/dnscrypt-allowed-ips-link 2>/dev/null || cat ${MODPATH}/config/custom-allowed-ips-url 2>/dev/null || true`);
@@ -1765,7 +1725,6 @@ body.light-theme #error-overlay {
                         const ipsetCustom = await run(`cat ${MODPATH}/ipset/custom.txt 2>/dev/null || true`, { trim: false });
                         const ipsetExclude = await run(`cat ${MODPATH}/ipset/exclude.txt 2>/dev/null || true`, { trim: false });
                         const dnscryptCustom = await run(`cat ${MODPATH}/dnscrypt/custom-cloaking-rules.txt 2>/dev/null || true`, { trim: false });
-                        const dnscryptCustomForwardingRules = await run(`cat ${MODPATH}/dnscrypt/custom-forwarding-rules.txt 2>/dev/null || true`, { trim: false });
                         const dnscryptCustomBlockedNames = await run(`cat ${MODPATH}/dnscrypt/custom-blocked-names.txt 2>/dev/null || true`, { trim: false });
                         const dnscryptCustomBlockedIps = await run(`cat ${MODPATH}/dnscrypt/custom-blocked-ips.txt 2>/dev/null || true`, { trim: false });
                         const dnscryptCustomAllowedNames = await run(`cat ${MODPATH}/dnscrypt/custom-allowed-names.txt 2>/dev/null || true`, { trim: false });
@@ -1812,7 +1771,6 @@ body.light-theme #error-overlay {
                         inputRknRegistry.value = rknRegistryLink;
                         applyLinkToggleState('dnscrypt-cloaking-rules-update', cloakingRulesLink, cloakingUpdate);
                         applyLinkToggleState('dnscrypt-blocked-names-update', blockedNamesLink, blockedNamesUpdate);
-                        applyLinkToggleState('dnscrypt-forwarding-rules-update', forwardingRulesLink, forwardingRulesUpdate);
                         applyLinkToggleState('dnscrypt-blocked-ips-update', blockedIpsLink, blockedIpsUpdate);
                         applyLinkToggleState('dnscrypt-allowed-names-update', allowedNamesLink, allowedNamesUpdate);
                         applyLinkToggleState('dnscrypt-allowed-ips-update', allowedIpsLink, allowedIpsUpdate);
@@ -1831,7 +1789,6 @@ body.light-theme #error-overlay {
                                     case 'ipset/custom.txt': content = ipsetCustom; break;
                                     case 'ipset/exclude.txt': content = ipsetExclude; break;
                                     case 'dnscrypt/custom-cloaking-rules.txt': content = dnscryptCustom; break;
-                                    case 'dnscrypt/custom-forwarding-rules.txt': content = dnscryptCustomForwardingRules; break;
                                     case 'dnscrypt/custom-blocked-names.txt': content = dnscryptCustomBlockedNames; break;
                                     case 'dnscrypt/custom-blocked-ips.txt': content = dnscryptCustomBlockedIps; break;
                                     case 'dnscrypt/custom-allowed-names.txt': content = dnscryptCustomAllowedNames; break;
@@ -1973,7 +1930,6 @@ btnPrimary.addEventListener('click', async () => {
                 setupToggle(toggleUpdateOnStart, 'update-on-start');
                 setupToggle(toggleCloakingUpdate, 'dnscrypt-cloaking-rules-update');
                 setupToggle(toggleBlockedNamesUpdate, 'dnscrypt-blocked-names-update');
-                setupToggle(toggleForwardingRulesUpdate, 'dnscrypt-forwarding-rules-update');
                 setupToggle(toggleBlockedIpsUpdate, 'dnscrypt-blocked-ips-update');
                 setupToggle(toggleAllowedNamesUpdate, 'dnscrypt-allowed-names-update');
                 setupToggle(toggleAllowedIpsUpdate, 'dnscrypt-allowed-ips-update');
@@ -2016,7 +1972,6 @@ btnPrimary.addEventListener('click', async () => {
                 setupCustomLinkInput(inputRknRegistry, 'reestr-link', ['custom-rkn-registry-url']);
                 setupCustomLinkInput(inputCloakingRules, 'dnscrypt-cloaking-rules-link', ['custom-cloaking-rules-url'], toggleCloakingUpdate, 'dnscrypt-cloaking-rules-update');
                 setupCustomLinkInput(inputBlockedNames, 'dnscrypt-blocked-names-link', ['custom-blocked-names-url'], toggleBlockedNamesUpdate, 'dnscrypt-blocked-names-update');
-                setupCustomLinkInput(inputForwardingRules, 'dnscrypt-forwarding-rules-link', ['custom-forwarding-rules-url'], toggleForwardingRulesUpdate, 'dnscrypt-forwarding-rules-update');
                 setupCustomLinkInput(inputBlockedIps, 'dnscrypt-blocked-ips-link', ['custom-blocked-ips-url'], toggleBlockedIpsUpdate, 'dnscrypt-blocked-ips-update');
                 setupCustomLinkInput(inputAllowedNames, 'dnscrypt-allowed-names-link', ['custom-allowed-names-url'], toggleAllowedNamesUpdate, 'dnscrypt-allowed-names-update');
                 setupCustomLinkInput(inputAllowedIps, 'dnscrypt-allowed-ips-link', ['custom-allowed-ips-url'], toggleAllowedIpsUpdate, 'dnscrypt-allowed-ips-update');

@@ -225,7 +225,7 @@ setup() {
         read resp2
         case "$(echo "$resp2" | tr A-Z a-z)" in
             y|yes)
-                echo "! Supported filenames: cloaking-rules.txt, forwarding-rules.txt, blocked-ips.txt, allowed-names.txt, allowed-ips.txt"
+                echo "! Supported filenames: cloaking-rules.txt, blocked-ips.txt, allowed-names.txt, allowed-ips.txt"
                 echo -n "- Enter link to cloaking-rules.txt (leave blank to keep current): "
                 read new_cloaking
                 if [ -n "$new_cloaking" ]; then
