@@ -59,7 +59,6 @@ resolve_dnscrypt_target() {
     name="$1"
     case "$name" in
         cloaking-rules.txt) echo "$DNSCRYPTLISTSDIR/cloaking-rules.txt" ;;
-        forwarding-rules.txt) echo "$DNSCRYPTLISTSDIR/forwarding-rules.txt" ;;
         blocked-ips.txt) echo "$DNSCRYPTLISTSDIR/blocked-ips.txt" ;;
         allowed-names.txt) echo "$DNSCRYPTLISTSDIR/custom-allowed-names.txt" ;;
         allowed-ips.txt) echo "$DNSCRYPTLISTSDIR/custom-allowed-ips.txt" ;;
@@ -154,7 +153,7 @@ update_dir() {
 }
 
 if [ "$IPV6ENABLE" != "1" ]; then
-    sh "$MODPATH/dnscrypt/custom-cloaking-rules.sh" disappend > /dev/null 2>&1 &
+    sh "$MODPATH/dnscrypt/custom-files.sh" disappend > /dev/null 2>&1 &
     sleep 2
 fi
 
@@ -166,6 +165,6 @@ update_dir "$ZAPRETIPSETSDIR" "$ZAPRETIPSETSDEFAULTLINK" "$PREDEFINED_IPSET_FILE
 [ "$IPV6ENABLE" != "1" ] && [ "$BLOCKEDIPSUPDATE" = "1" ] && update_dnscrypt_file_from_link "$DNSCRYPTFILES_blocked_ips"
 
 if [ "$IPV6ENABLE" != "1" ]; then
-    sh "$MODPATH/dnscrypt/custom-cloaking-rules.sh" append > /dev/null 2>&1 &
+    sh "$MODPATH/dnscrypt/custom-files.sh" append > /dev/null 2>&1 &
     sleep 2
 fi
