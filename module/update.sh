@@ -26,7 +26,7 @@ read_link_config() {
     printf '%s\n' "$default_value"
 }
 
-DNSCRYPTFILES_cloaking_rules=$(read_link_config "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/cloaking-rules.txt" dnscrypt-cloaking-rules-link custom-cloaking-rules-url)
+DNSCRYPTFILES_cloaking_rules=$(read_link_config "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/cloaking-rules-2.txt" dnscrypt-cloaking-rules-link custom-cloaking-rules-url)
 DNSCRYPTFILES_blocked_names=$(read_link_config "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/blocked-yandex.txt" dnscrypt-blocked-names-link custom-blocked-names-url)
 DNSCRYPTFILES_blocked_ips=$(read_link_config "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/blocked-ips.txt" dnscrypt-blocked-ips-link custom-blocked-ips-url)
 CUSTOMLINKIPSETV4=$(read_link_config "https://raw.githubusercontent.com/sevcator/zapret-lists/refs/heads/main/ipset-v4.txt" ipset-v4-link custom-ipv4-ranges-url)
