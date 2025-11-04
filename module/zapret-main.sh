@@ -23,8 +23,6 @@ migrate_legacy_link custom-cloaking-rules-url dnscrypt-cloaking-rules-link
 migrate_legacy_link custom-blocked-names-url dnscrypt-blocked-names-link
 touch "$MODPATH/dnscrypt/cloaking-rules.txt"
 touch "$MODPATH/dnscrypt/custom-cloaking-rules.txt"
-touch "$MODPATH/dnscrypt/forwarding-rules.txt"
-touch "$MODPATH/dnscrypt/custom-forwarding-rules.txt"
 touch "$MODPATH/dnscrypt/blocked-names.txt"
 touch "$MODPATH/dnscrypt/blocked-ips.txt"
 touch "$MODPATH/dnscrypt/custom-blocked-names.txt"

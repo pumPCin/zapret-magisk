@@ -46,7 +46,6 @@ cache_neg_min_ttl = 30
 cache_neg_max_ttl = 180
 
 cloaking_rules = 'cloaking-rules.txt'
-forwarding_rules = 'forwarding-rules.txt'
 
 [blocked_names]
 blocked_names_file = 'blocked-names.txt'
