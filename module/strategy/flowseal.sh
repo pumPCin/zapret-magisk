@@ -9,7 +9,7 @@ config="$config --filter-udp=80,443 --hostlist=$MODPATH/list/default.txt --hostl
 
 if [ "$(cat "$MODPATH/config/bypass-calls" 2>/dev/null || echo 0)" = "1" ]; then
    config="$config --filter-tcp=2053,2083,2087,2096,8443 --hostlist-domains=discord.media --dpi-desync=multisplit --dpi-desync-split-seqovl=568 --dpi-desync-split-pos=1 --dpi-desync-split-seqovl-pattern=$MODPATH/fake/tls_clienthello_4pda_to.bin --new"
-   config="$config --filter-udp=19294,19344,50000-10000 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new"
+   config="$config --filter-udp=19294,19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new"
    config="$config --filter-l3=ipv4 --filter-udp=1400 --filter-l7=stun,unknown --dpi-desync=fake --dpi-desync-autottl --dup=2 --dup-autottl --dup-cutoff=n3 --new"
    config="$config --filter-l3=ipv6 --filter-udp=1400 --filter-l7=stun,unknown --dpi-desync=fake --dpi-desync-autottl6 --dup=2 --dup-autottl6 --dup-cutoff=n3"
 fi
