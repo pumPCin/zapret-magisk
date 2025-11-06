@@ -87,21 +87,21 @@ remove_rules_matching() {
 }
 
 for proto in udp tcp; do
-    remove_rules_matching iptables nat PREROUTING "-p $proto --dport 53 -j DNAT --to-destination 127.0.0.1:5253"
-    remove_rules_matching iptables nat OUTPUT "-p $proto --dport 53 -j DNAT --to-destination 127.0.0.1:5253"
-    remove_rules_matching iptables nat FORWARD "-p $proto --dport 53 -j DNAT --to-destination 127.0.0.1:5253"
+    remove_rules_matching iptables nat PREROUTING "--dport 53 -j DNAT --to-destination 127.0.0.1:5253"
+    remove_rules_matching iptables nat OUTPUT "--dport 53 -j DNAT --to-destination 127.0.0.1:5253"
+    remove_rules_matching iptables nat FORWARD "--dport 53 -j DNAT --to-destination 127.0.0.1:5253"
 
-    remove_rules_matching ip6tables nat PREROUTING "-p $proto --dport 53 -j REDIRECT --to-ports 5253"
-    remove_rules_matching ip6tables nat OUTPUT "-p $proto --dport 53 -j REDIRECT --to-ports 5253"
-    remove_rules_matching ip6tables nat FORWARD "-p $proto --dport 53 -j REDIRECT --to-ports 5253"
+    remove_rules_matching ip6tables nat PREROUTING "--dport 53 -j REDIRECT --to-ports 5253"
+    remove_rules_matching ip6tables nat OUTPUT "--dport 53 -j REDIRECT --to-ports 5253"
+    remove_rules_matching ip6tables nat FORWARD "--dport 53 -j REDIRECT --to-ports 5253"
 
-    remove_rules_matching iptables filter OUTPUT "-p $proto --dport 853 -j DROP"
-    remove_rules_matching iptables filter FORWARD "-p $proto --dport 853 -j DROP"
-    remove_rules_matching iptables filter INPUT "-p $proto --dport 853 -j DROP"
+    remove_rules_matching iptables filter OUTPUT "--dport 853 -j DROP"
+    remove_rules_matching iptables filter FORWARD "--dport 853 -j DROP"
+    remove_rules_matching iptables filter INPUT "--dport 853 -j DROP"
 
-    remove_rules_matching ip6tables filter OUTPUT "-p $proto --dport 853 -j DROP"
-    remove_rules_matching ip6tables filter FORWARD "-p $proto --dport 853 -j DROP"
-    remove_rules_matching ip6tables filter INPUT "-p $proto --dport 853 -j DROP"
+    remove_rules_matching ip6tables filter OUTPUT "--dport 853 -j DROP"
+    remove_rules_matching ip6tables filter FORWARD "--dport 853 -j DROP"
+    remove_rules_matching ip6tables filter INPUT "--dport 853 -j DROP"
 done
 
 for chain in PREROUTING POSTROUTING; do
