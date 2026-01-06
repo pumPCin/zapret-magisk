@@ -304,6 +304,13 @@
             transition: .3s;
             border-radius: 50%;
         }
+        .switch input:disabled + .slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .switch input:disabled + .slider:before {
+            background-color: var(--disabled-color);
+        }
         input:checked + .slider {
             background-color: var(--accent-color);
         }
@@ -360,6 +367,11 @@
             border-color: var(--accent-color);
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
+        .list-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            pointer-events: none;
+        }
         .textarea-footer {
             display: flex;
             align-items: center;
@@ -399,6 +411,16 @@
         }
         .logs-disabled {
             opacity: 0.7;
+        }
+        [data-dnscrypt-group].dnscrypt-list-disabled {
+            opacity: 0.6;
+        }
+        [data-dnscrypt-group].dnscrypt-list-disabled textarea {
+            background-color: var(--disabled-color);
+            cursor: not-allowed;
+        }
+        [data-dnscrypt-group].dnscrypt-list-disabled .btn {
+            cursor: not-allowed;
         }
         .log-line {
             white-space: pre-wrap;
@@ -512,6 +534,12 @@
             opacity: 0.8;
             margin-top: 1rem;
             text-align: center;
+        }
+        .input-hint {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            opacity: 0.85;
+            margin-top: 6px;
         }
         body.light-theme {
             --bg-main: #F5F5F5;
@@ -797,9 +825,13 @@ body.light-theme #error-overlay {
 <div class="list-selector">
 <button class="list-btn active" data-i18n="list_custom" data-tab="tab-list-custom">List Custom</button>
 <button class="list-btn" data-i18n="list_exclude" data-tab="tab-list-exclude">List Exclude</button>
-<button class="list-btn" data-i18n="ipset_custom" data-tab="tab-ipset-custom">IPSet Custom</button>
-<button class="list-btn" data-i18n="ipset_exclude" data-tab="tab-ipset-exclude">IPSet Exclude</button>
-<button class="list-btn" data-i18n="dnscrypt_custom" data-tab="tab-dnscrypt-custom">DNSCrypt Custom</button>
+                    <button class="list-btn" data-i18n="ipset_custom" data-tab="tab-ipset-custom">IPSet Custom</button>
+                    <button class="list-btn" data-i18n="ipset_exclude" data-tab="tab-ipset-exclude">IPSet Exclude</button>
+                    <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom" data-tab="tab-dnscrypt-custom">DNSCrypt Custom</button>
+                    <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_blocked_names" data-tab="tab-dnscrypt-blocked-names">DNSCrypt Custom Blocked Names</button>
+                    <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_blocked_ips" data-tab="tab-dnscrypt-blocked-ips">DNSCrypt Custom Blocked IPs</button>
+                    <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_allowed_names" data-tab="tab-dnscrypt-allowed-names">DNSCrypt Custom Allowed Names</button>
+                    <button class="list-btn dnscrypt-related dnscrypt-dependent" data-dnscrypt-control="true" data-i18n="dnscrypt_custom_allowed_ips" data-tab="tab-dnscrypt-allowed-ips">DNSCrypt Custom Allowed IPs</button>
 </div>
 <div class="tab-content-wrapper">
 <div class="tab-content active" id="tab-list-custom">
@@ -862,21 +894,81 @@ body.light-theme #error-overlay {
 <button class="btn btn-save" data-i18n="btn_save" data-path="ipset/exclude.txt">Сохранить</button>
 </div>
 </div>
-<div class="tab-content" id="tab-dnscrypt-custom">
-<textarea id="file-dnscrypt-custom" rows="10"></textarea>
-<div class="textarea-footer">
-<span class="line-counter" data-i18n-base="line_counter">
-          Строк: 0
-         </span>
-<button class="btn btn-icon btn-clear" data-i18n-title="btn_clear_title" data-target="file-dnscrypt-custom">
+                <div class="tab-content" data-dnscrypt-group="true" id="tab-dnscrypt-custom">
+                    <textarea data-dnscrypt-control="true" id="file-dnscrypt-custom" rows="10"></textarea>
+                    <div class="textarea-footer">
+                        <span class="line-counter" data-i18n-base="line_counter">
+                          Строк: 0
+                         </span>
+                        <button class="btn btn-icon btn-clear" data-dnscrypt-control="true" data-i18n-title="btn_clear_title" data-target="file-dnscrypt-custom">
 <svg viewbox="0 0 24 24">
 <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
 </path>
 </svg>
 </button>
-<button class="btn btn-save" data-i18n="btn_save" data-path="dnscrypt/custom-cloaking-rules.txt">Сохранить</button>
-</div>
-</div>
+                        <button class="btn btn-save" data-dnscrypt-control="true" data-i18n="btn_save" data-path="dnscrypt/custom-cloaking-rules.txt">Сохранить</button>
+                    </div>
+                </div>
+                <div class="tab-content" data-dnscrypt-group="true" id="tab-dnscrypt-blocked-names">
+                    <textarea data-dnscrypt-control="true" id="file-dnscrypt-blocked-names" rows="10"></textarea>
+                    <div class="textarea-footer">
+                        <span class="line-counter" data-i18n-base="line_counter">
+                          Строк: 0
+                         </span>
+                        <button class="btn btn-icon btn-clear" data-dnscrypt-control="true" data-i18n-title="btn_clear_title" data-target="file-dnscrypt-blocked-names">
+                            <svg viewbox="0 0 24 24">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button class="btn btn-save" data-dnscrypt-control="true" data-i18n="btn_save" data-path="dnscrypt/custom-blocked-names.txt">Сохранить</button>
+                    </div>
+                </div>
+                <div class="tab-content" data-dnscrypt-group="true" id="tab-dnscrypt-blocked-ips">
+                    <textarea data-dnscrypt-control="true" id="file-dnscrypt-blocked-ips" rows="10"></textarea>
+                    <div class="textarea-footer">
+                        <span class="line-counter" data-i18n-base="line_counter">
+                          Строк: 0
+                         </span>
+                        <button class="btn btn-icon btn-clear" data-dnscrypt-control="true" data-i18n-title="btn_clear_title" data-target="file-dnscrypt-blocked-ips">
+                            <svg viewbox="0 0 24 24">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button class="btn btn-save" data-dnscrypt-control="true" data-i18n="btn_save" data-path="dnscrypt/custom-blocked-ips.txt">Сохранить</button>
+                    </div>
+                </div>
+                <div class="tab-content" data-dnscrypt-group="true" id="tab-dnscrypt-allowed-names">
+                    <textarea data-dnscrypt-control="true" id="file-dnscrypt-allowed-names" rows="10"></textarea>
+                    <div class="textarea-footer">
+                        <span class="line-counter" data-i18n-base="line_counter">
+                          Строк: 0
+                         </span>
+                        <button class="btn btn-icon btn-clear" data-dnscrypt-control="true" data-i18n-title="btn_clear_title" data-target="file-dnscrypt-allowed-names">
+                            <svg viewbox="0 0 24 24">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button class="btn btn-save" data-dnscrypt-control="true" data-i18n="btn_save" data-path="dnscrypt/custom-allowed-names.txt">Сохранить</button>
+                    </div>
+                </div>
+                <div class="tab-content" data-dnscrypt-group="true" id="tab-dnscrypt-allowed-ips">
+                    <textarea data-dnscrypt-control="true" id="file-dnscrypt-allowed-ips" rows="10"></textarea>
+                    <div class="textarea-footer">
+                        <span class="line-counter" data-i18n-base="line_counter">
+                          Строк: 0
+                         </span>
+                        <button class="btn btn-icon btn-clear" data-dnscrypt-control="true" data-i18n-title="btn_clear_title" data-target="file-dnscrypt-allowed-ips">
+                            <svg viewbox="0 0 24 24">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
+                                </path>
+                            </svg>
+                        </button>
+                        <button class="btn btn-save" data-dnscrypt-control="true" data-i18n="btn_save" data-path="dnscrypt/custom-allowed-ips.txt">Сохранить</button>
+                    </div>
+                </div>
 </div>
 </div>
 </main>
@@ -920,10 +1012,22 @@ body.light-theme #error-overlay {
 </span>
 </label>
 </div>
+<div class="setting-item stacked">
+<label data-i18n="interface_only">Только для интерфейса</label>
+<input class="text-input" data-i18n-placeholder="interface_only_placeholder" id="input-interface-only" placeholder="wlan0" type="text"/>
+</div>
 <div class="setting-item dnscrypt-related">
 <label data-i18n="dnscrypt_proxy">DNSCrypt Proxy</label>
 <label class="switch">
 <input id="toggle-dnscrypt" type="checkbox"/>
+<span class="slider">
+</span>
+</label>
+</div>
+<div class="setting-item dnscrypt-related dnscrypt-dependent">
+<label data-i18n="ignore_dnscrypt">Игнорировать DNSCrypt Proxy</label>
+<label class="switch">
+<input id="toggle-ignore-dnscrypt" type="checkbox"/>
 <span class="slider">
 </span>
 </label>
@@ -944,22 +1048,49 @@ body.light-theme #error-overlay {
 </span>
 </label>
 </div>
-<div class="setting-item dnscrypt-related dnscrypt-dependent">
-<label data-i18n="update_cloaking">Обновление Cloaking Rules</label>
-<label class="switch">
-<input id="toggle-cloaking-update" type="checkbox"/>
-<span class="slider">
-</span>
-</label>
-</div>
-<div class="setting-item dnscrypt-related dnscrypt-dependent">
-<label data-i18n="update_blocked_names">Обновление доменов для блокировки</label>
-<label class="switch">
-<input id="toggle-blocked-names-update" type="checkbox"/>
-<span class="slider">
-</span>
-</label>
-</div>
+        <div class="setting-item dnscrypt-related dnscrypt-dependent">
+            <label data-i18n="update_cloaking">Правила маскировки</label>
+            <label class="switch">
+                <input id="toggle-cloaking-update" type="checkbox"/>
+                <span class="slider">
+                </span>
+            </label>
+        </div>
+        <div class="setting-item dnscrypt-related dnscrypt-dependent">
+            <label data-i18n="update_allowed_names">Разрешенные домены</label>
+            <label class="switch">
+                <input id="toggle-allowed-names-update" type="checkbox"/>
+                <span class="slider">
+                </span>
+            </label>
+        </div>
+        <div class="setting-item dnscrypt-related dnscrypt-dependent">
+            <label data-i18n="update_allowed_ips">Разрешенные IP</label>
+            <label class="switch">
+                <input id="toggle-allowed-ips-update" type="checkbox"/>
+                <span class="slider">
+                </span>
+            </label>
+        </div>
+        <div class="setting-item dnscrypt-related dnscrypt-dependent">
+            <label data-i18n="update_blocked_names">Блокируемые домены</label>
+            <label class="switch">
+                <input id="toggle-blocked-names-update" type="checkbox"/>
+                <span class="slider">
+                </span>
+            </label>
+        </div>
+        <div class="setting-item dnscrypt-related dnscrypt-dependent">
+            <label data-i18n="update_blocked_ips">Блокируемые IP</label>
+            <label class="switch">
+                <input id="toggle-blocked-ips-update" type="checkbox"/>
+                <span class="slider">
+                </span>
+            </label>
+        </div>
+        <div class="setting-item dnscrypt-related dnscrypt-dependent">
+            <button class="btn btn-full" data-i18n="clear_dnscrypt_files" id="btn-clear-dnscrypt">Очистить DNSCrypt файлы</button>
+        </div>
 </div>
 <h3 class="subsection-title" data-i18n="custom_links_title">Свои ссылки</h3>
 <div class="settings">
@@ -975,14 +1106,27 @@ body.light-theme #error-overlay {
 <label data-i18n="registry_link">Ссылка на реестр</label>
 <input class="text-input" id="input-rkn-registry" placeholder="https://example.github.io/reestr.txt" type="text"/>
 </div>
-<div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
-<label data-i18n="cloaking_rules_link">Ссылка на Cloaking Rules</label>
-<input class="text-input" id="input-cloaking-rules" placeholder="https://example.github.io/cloaking-rules.txt" type="text"/>
-</div>
-<div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
-<label data-i18n="blocked_names_link">Ссылка на Blocked Names</label>
-<input class="text-input" id="input-blocked-names" placeholder="https://example.github.io/blocked-names.txt" type="text"/>
-</div>
+    <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
+        <label data-i18n="cloaking_rules_link">Ссылка на правила маскировки</label>
+        <input class="text-input" id="input-cloaking-rules" placeholder="https://example.github.io/cloaking-rules.txt" type="text"/>
+        <p class="input-hint" data-i18n="cloaking_rules_hint">Можно указывать ссылки на allowed-names.txt, allowed-ips.txt или blocked-ips.txt.</p>
+    </div>
+    <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
+        <label data-i18n="allowed_names_link">Ссылка на Allowed Names</label>
+        <input class="text-input" id="input-allowed-names" placeholder="https://example.github.io/allowed-names.txt" type="text"/>
+    </div>
+    <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
+        <label data-i18n="allowed_ips_link">Ссылка на Allowed IPs</label>
+        <input class="text-input" id="input-allowed-ips" placeholder="https://example.github.io/allowed-ips.txt" type="text"/>
+    </div>
+    <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
+        <label data-i18n="blocked_names_link">Ссылка на Blocked Names</label>
+        <input class="text-input" id="input-blocked-names" placeholder="https://example.github.io/blocked-names.txt" type="text"/>
+    </div>
+    <div class="setting-item dnscrypt-related dnscrypt-dependent stacked">
+        <label data-i18n="blocked_ips_link">Ссылка на Blocked IPs</label>
+        <input class="text-input" id="input-blocked-ips" placeholder="https://example.github.io/blocked-ips.txt" type="text"/>
+    </div>
 </div>
 <p class="note" data-i18n="note_restart">После изменения настроек не забудьте перезапустить службу.</p>
 </div>
@@ -1097,11 +1241,16 @@ body.light-theme #error-overlay {
                 "btn_start": "Запустить",
                 "btn_stop": "Остановить",
                 "editor_title": "Редактор списков",
-                "list_custom": "List Custom",
-                "list_exclude": "List Exclude",
-                "ipset_custom": "IPSet Custom",
-                "ipset_exclude": "IPSet Exclude",
-                "dnscrypt_custom": "Пользовательский cloaking-rules.txt",
+                "list_custom": "Польз. лист",
+                "list_exclude": "Искл. лист",
+                "ipset_custom": "Польз. IPсет",
+                "ipset_exclude": "Искл. IPсет",
+                "dnscrypt_custom": "Польз. правила маскировки",
+                "dnscrypt_custom_blocked_names": "Польз. заблокированные имена",
+                "dnscrypt_custom_blocked_ips": "Польз. заблокированные IP",
+                "dnscrypt_custom_allowed_names": "Польз. разрешённые имена",
+                "dnscrypt_custom_allowed_ips": "Польз. разрешённые IP",
+                "clear_dnscrypt_files": "Очистить DNSCrypt файлы",
                 "line_counter": "Строк: {count}",
                 "btn_clear_title": "Очистить список",
                 "btn_save": "Сохранить",
@@ -1114,18 +1263,28 @@ body.light-theme #error-overlay {
                 "btn_cancel": "Отмена",
                 "active_strategy": "Стратегия",
                 "dnscrypt_proxy": "DNSCrypt Proxy",
+                "ignore_dnscrypt": "Игнорировать DNSCrypt Proxy",
                 "dnscrypt_rules_refresh": "Обновление правил",
                 "update_on_start": "Обновление при запуске",
-                "update_cloaking": "Обновление Cloaking Rules",
-                "update_blocked_names": "Обновление Blocked Names",
+                "update_cloaking": "Правила маскировки",
+                "update_blocked_names": "Блокируемые домены",
+                "update_blocked_ips": "Блокируемые IP",
+                "update_allowed_names": "Разрешенные домены",
+                "update_allowed_ips": "Разрешенные IP",
                 "ipv6_enable": "Включить IPv6",
                 "network_tweaks": "Твики интернета",
+                "interface_only": "Только для интерфейса",
+                "interface_only_placeholder": "Например, wlan0",
                 "custom_links_title": "Пользовательские источники",
                 "ipv4_ranges_link": "Ссылка на IPv4 диапазоны",
                 "ipv6_ranges_link": "Ссылка на IPv6 диапазоны",
                 "registry_link": "Ссылка на реестр",
-                "cloaking_rules_link": "Ссылка на Cloaking Rules",
-                "blocked_names_link": "Ссылка на Blocked Names",
+                "cloaking_rules_link": "Ссылка на правила маскировки",
+                "cloaking_rules_hint": "Можно указывать свои ссылки на файлы",
+                "blocked_names_link": "Ссылка на блокируемые домены",
+                "blocked_ips_link": "Ссылка на блокируемые IP",
+                "allowed_names_link": "Ссылка на разрешенные имера",
+                "allowed_ips_link": "Ссылка на разрешенные IP",
                 "note_restart": "После изменения настроек не забудьте перезапустить службу",
                 "interface_settings_title": "Интерфейс",
                 "dark_theme": "Темная тема",
@@ -1154,6 +1313,11 @@ body.light-theme #error-overlay {
                 "ipset_custom": "IPSet Custom",
                 "ipset_exclude": "IPSet Exclude",
                 "dnscrypt_custom": "Custom cloaking-rules.txt",
+                "dnscrypt_custom_blocked_names": "Custom blocked-names.txt",
+                "dnscrypt_custom_blocked_ips": "Custom blocked-ips.txt",
+                "dnscrypt_custom_allowed_names": "Custom allowed-names.txt",
+                "dnscrypt_custom_allowed_ips": "Custom allowed-ips.txt",
+                "clear_dnscrypt_files": "Clear DNSCrypt files",
                 "line_counter": "Lines: {count}",
                 "btn_clear_title": "Clear list",
                 "btn_save": "Save",
@@ -1166,18 +1330,28 @@ body.light-theme #error-overlay {
                 "btn_cancel": "Cancel",
                 "active_strategy": "Strategy",
                 "dnscrypt_proxy": "DNSCrypt Proxy",
+                "ignore_dnscrypt": "Ignore DNSCrypt Proxy",
                 "dnscrypt_rules_refresh": "Refresh rules",
                 "update_on_start": "Update on startup",
-                "update_cloaking": "Update Cloaking Rules",
-                "update_blocked_names": "Update Blocked Names",
+                "update_cloaking": "Cloaking Rules",
+                "update_blocked_names": "Blocked Names",
+                "update_blocked_ips": "Blocked IPs",
+                "update_allowed_names": "Allowed Names",
+                "update_allowed_ips": "Allowed IPs",
                 "ipv6_enable": "Enable IPv6",
                 "network_tweaks": "Network Tweaks",
+                "interface_only": "Only for interface",
+                "interface_only_placeholder": "For example, wlan0",
                 "custom_links_title": "Custom Links",
                 "ipv4_ranges_link": "IPv4 Ranges Link",
                 "ipv6_ranges_link": "IPv6 Ranges Link",
                 "registry_link": "Reestr Link",
                 "cloaking_rules_link": "Cloaking Rules Link",
+                "cloaking_rules_hint": "You can change links to files",
                 "blocked_names_link": "Blocked Names Link",
+                "blocked_ips_link": "Blocked IPs Link",
+                "allowed_names_link": "Allowed Names Link",
+                "allowed_ips_link": "Allowed IPs Link",
                 "note_restart": "Restart the service after changing settings",
                 "interface_settings_title": "Interface",
                 "dark_theme": "Dark Theme",
@@ -1262,26 +1436,38 @@ body.light-theme #error-overlay {
                         applyLanguage();
                     }
                 };
-const loadingOverlay = document.getElementById('loading-overlay');
-function showLoading() {
-    btnPrimary.disabled = true;
-    loadingOverlay.classList.remove('hidden');
-}
-function hideLoading() {
-    btnPrimary.disabled = false;
-    loadingOverlay.classList.add('hidden');
-}
-async function waitForPidChange(oldPid, timeout = 5000) {
-    const start = Date.now();
-    while (Date.now() - start < timeout) {
-        const status = await run('pgrep -f "nfqws" >/dev/null && echo "Running" || echo "Stopped"');
-        if (oldPid === 'Stopped' ? status.trim() === 'Running' : status.trim() === 'Stopped') {
-            return status;
-        }
-        await new Promise(res => setTimeout(res, 500));
-    }
-    throw new Error('Status did not change');
-}
+                const DEFAULT_ENABLED_TOGGLE_CONFIGS = new Set([
+                    'dnscrypt-cloaking-rules-update',
+                    'dnscrypt-blocked-names-update',
+                    'dnscrypt-blocked-ips-update'
+                ]);
+                const DEFAULT_LINKS_BY_CONFIG = {
+                    'dnscrypt-cloaking-rules-update': 'https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/cloaking-rules.txt',
+                    'dnscrypt-blocked-names-update': 'https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/blocked-yandex.txt',
+                    'dnscrypt-blocked-ips-update': 'https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/blocked-ips.txt'
+                };
+                const loadingOverlay = document.getElementById('loading-overlay');
+                const showLoading = () => {
+                    btnPrimary.disabled = true;
+                    loadingOverlay.classList.remove('hidden');
+                };
+                const hideLoading = () => {
+                    btnPrimary.disabled = false;
+                    loadingOverlay.classList.add('hidden');
+                };
+                const waitForPidChange = async (oldPid, timeout = 5000) => {
+                    const start = Date.now();
+                    while (Date.now() - start < timeout) {
+                        const status = await run('pgrep -f "nfqws" >/dev/null && echo "Running" || echo "Stopped"');
+                        const becameRunning = oldPid === 'Stopped' && status.trim() === 'Running';
+                        const becameStopped = oldPid !== 'Stopped' && status.trim() === 'Stopped';
+                        if (becameRunning || becameStopped) {
+                            return status;
+                        }
+                        await new Promise(res => setTimeout(res, 500));
+                    }
+                    throw new Error('Status did not change');
+                };
                 const statusNfqws = document.getElementById('status-nfqws');
                 const statusDnscrypt = document.getElementById('status-dnscrypt');
                 const btnPrimary = document.getElementById('btn-primary');
@@ -1289,11 +1475,16 @@ async function waitForPidChange(oldPid, timeout = 5000) {
                 const btnPrimaryText = document.getElementById('btn-primary-text');
                 const strategySelect = document.getElementById('strategy-select');
                 const btnImportStrategy = document.getElementById('btn-import-strategy');
+                const btnClearDnscrypt = document.getElementById('btn-clear-dnscrypt');
                 const toggleDnscrypt = document.getElementById('toggle-dnscrypt');
+                const toggleIgnoreDnscrypt = document.getElementById('toggle-ignore-dnscrypt');
                 const toggleRulesRecheck = document.getElementById('toggle-rules-recheck');
                 const toggleUpdateOnStart = document.getElementById('toggle-update-on-start');
                 const toggleCloakingUpdate = document.getElementById('toggle-cloaking-update');
                 const toggleBlockedNamesUpdate = document.getElementById('toggle-blocked-names-update');
+                const toggleBlockedIpsUpdate = document.getElementById('toggle-blocked-ips-update');
+                const toggleAllowedNamesUpdate = document.getElementById('toggle-allowed-names-update');
+                const toggleAllowedIpsUpdate = document.getElementById('toggle-allowed-ips-update');
                 const toggleIpv6 = document.getElementById('toggle-ipv6');
                 const logsContentzapret = document.getElementById('logs-content-zapret');
                 const logsContentDnscrypt = document.getElementById('logs-content-dnscrypt');
@@ -1313,19 +1504,52 @@ async function waitForPidChange(oldPid, timeout = 5000) {
                 const inputRknRegistry = document.getElementById('input-rkn-registry');
                 const inputCloakingRules = document.getElementById('input-cloaking-rules');
                 const inputBlockedNames = document.getElementById('input-blocked-names');
+                const inputBlockedIps = document.getElementById('input-blocked-ips');
+                const inputAllowedNames = document.getElementById('input-allowed-names');
+                const inputAllowedIps = document.getElementById('input-allowed-ips');
+                const interfaceInput = document.getElementById('input-interface-only');
                 let currentzapretLogText = '';
                 let currentDnscryptLogText = '';
+                const linkTogglePairs = [
+                    { configName: 'dnscrypt-cloaking-rules-update', toggle: toggleCloakingUpdate, input: inputCloakingRules, lastHasLink: false, defaultLink: DEFAULT_LINKS_BY_CONFIG['dnscrypt-cloaking-rules-update'] },
+                    { configName: 'dnscrypt-blocked-names-update', toggle: toggleBlockedNamesUpdate, input: inputBlockedNames, lastHasLink: false, defaultLink: DEFAULT_LINKS_BY_CONFIG['dnscrypt-blocked-names-update'] },
+                    { configName: 'dnscrypt-blocked-ips-update', toggle: toggleBlockedIpsUpdate, input: inputBlockedIps, lastHasLink: false, defaultLink: DEFAULT_LINKS_BY_CONFIG['dnscrypt-blocked-ips-update'] },
+                    { configName: 'dnscrypt-allowed-names-update', toggle: toggleAllowedNamesUpdate, input: inputAllowedNames, lastHasLink: false },
+                    { configName: 'dnscrypt-allowed-ips-update', toggle: toggleAllowedIpsUpdate, input: inputAllowedIps, lastHasLink: false }
+                ];
                 const fileContents = {
                     'list/custom.txt': document.getElementById('file-list-custom'),
                     'list/exclude.txt': document.getElementById('file-list-exclude'),
                     'ipset/custom.txt': document.getElementById('file-ipset-custom'),
                     'ipset/exclude.txt': document.getElementById('file-ipset-exclude'),
-                    'dnscrypt/custom-cloaking-rules.txt': document.getElementById('file-dnscrypt-custom')
+                    'dnscrypt/custom-cloaking-rules.txt': document.getElementById('file-dnscrypt-custom'),
+                    'dnscrypt/custom-blocked-names.txt': document.getElementById('file-dnscrypt-blocked-names'),
+                    'dnscrypt/custom-blocked-ips.txt': document.getElementById('file-dnscrypt-blocked-ips'),
+                    'dnscrypt/custom-allowed-names.txt': document.getElementById('file-dnscrypt-allowed-names'),
+                    'dnscrypt/custom-allowed-ips.txt': document.getElementById('file-dnscrypt-allowed-ips')
                 };
                 const isDirty = {};
                 Object.keys(fileContents).forEach(path => {
                     isDirty[path] = false;
                 });
+                let lastInterfaceOnlyValue = '';
+                let isZapretRunning = false;
+                let shouldDnscryptRun = false;
+                const listButtons = Array.from(document.querySelectorAll('.list-btn'));
+                const tabContents = Array.from(document.querySelectorAll('.tab-content'));
+                const activateTab = (button) => {
+                    if (!button) return;
+                    listButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const targetTabId = button.dataset.tab;
+                    tabContents.forEach(content => {
+                        if (content.id === targetTabId) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                };
                 const updateStatusIndicator = (element, status) => {
                     const textEl = element.querySelector('.text');
                     if (status === 'Running') {
@@ -1338,25 +1562,92 @@ async function waitForPidChange(oldPid, timeout = 5000) {
                         if (textEl) textEl.textContent = 'Stopped';
                     }
                 };
-                const run = async (command) => {
+                const run = async (command, { trim = true } = {}) => {
                     const { errno, stdout, stderr } = await ksu_exec(command);
                     if (errno !== 0) {
                         console.error(`Command failed: ${command}\nStderr: ${stderr}`);
                         throw new Error(stderr || `Command failed with code ${errno}`);
                     }
-                    return stdout.trim();
+                    return trim ? stdout.trim() : stdout;
                 };
+                const shellEscape = (value) => value.replace(/'/g, "'\\''");
                 const updateDnscryptDependentFields = (dnscryptEnabled, ipv6Enabled) => {
                     const dnscryptElements = document.querySelectorAll('.dnscrypt-related');
                     dnscryptElements.forEach(element => {
                         const isDependent = element.classList.contains('dnscrypt-dependent');
                         const shouldDisable = ipv6Enabled || (isDependent && !dnscryptEnabled);
                         element.classList.toggle('disabled', shouldDisable);
-                        const inputs = element.querySelectorAll('input, .text-input');
+                        if ('disabled' in element) {
+                            element.disabled = shouldDisable;
+                        }
+                        const inputs = element.querySelectorAll('input, .text-input, textarea, button, select');
                         inputs.forEach(input => {
-                            input.disabled = shouldDisable;
+                            if ('disabled' in input) {
+                                input.disabled = shouldDisable;
+                            }
                         });
                     });
+                    const shouldDisableDnscryptLists = ipv6Enabled || !dnscryptEnabled;
+                    const dependentGroups = document.querySelectorAll('[data-dnscrypt-group]');
+                    dependentGroups.forEach(group => {
+                        group.classList.toggle('dnscrypt-list-disabled', shouldDisableDnscryptLists);
+                    });
+                    const dependentControls = document.querySelectorAll('[data-dnscrypt-control]');
+                    dependentControls.forEach(control => {
+                        if ('disabled' in control) {
+                            control.disabled = shouldDisableDnscryptLists;
+                        }
+                    });
+                    if (shouldDisableDnscryptLists) {
+                        const activeButton = document.querySelector('.list-btn.active');
+                        if (activeButton && activeButton.classList.contains('dnscrypt-dependent')) {
+                            const fallbackButton = listButtons.find(btn => !btn.classList.contains('dnscrypt-dependent'));
+                            if (fallbackButton) {
+                                activateTab(fallbackButton);
+                            }
+                        }
+                    }
+                    linkTogglePairs.forEach(pair => {
+                        if (!pair || !pair.toggle) {
+                            return;
+                        }
+                        const hasLink = !!pair.lastHasLink;
+                        const shouldDisableToggle = shouldDisableDnscryptLists || !hasLink;
+                        pair.toggle.disabled = shouldDisableToggle;
+                        if (!hasLink) {
+                            pair.toggle.checked = false;
+                        }
+                    });
+                };
+                const applyLinkToggleState = (configName, linkValue, updateValue) => {
+                    const pair = linkTogglePairs.find(item => item.configName === configName);
+                    if (!pair) {
+                        return;
+                    }
+                    const normalizedLink = (linkValue || '').trim();
+                    const fallbackLink = pair.defaultLink || DEFAULT_LINKS_BY_CONFIG[configName] || '';
+                    const effectiveLink = normalizedLink || fallbackLink;
+                    pair.lastHasLink = effectiveLink !== '';
+                    if (pair.input) {
+                        pair.input.value = normalizedLink || fallbackLink;
+                    }
+                    if (!pair.toggle) {
+                        return;
+                    }
+                    let shouldCheck = false;
+                    if (pair.lastHasLink) {
+                        if (normalizedLink) {
+                            shouldCheck = updateValue === '1' || (updateValue === '' && DEFAULT_ENABLED_TOGGLE_CONFIGS.has(configName));
+                        } else {
+                            if (updateValue === '1') {
+                                shouldCheck = true;
+                            } else if (updateValue === '') {
+                                shouldCheck = DEFAULT_ENABLED_TOGGLE_CONFIGS.has(configName);
+                            }
+                        }
+                    }
+                    pair.toggle.checked = pair.lastHasLink && shouldCheck;
+                    pair.toggle.disabled = !pair.lastHasLink;
                 };
                 const renderzapretLogs = (logText) => {
                     if (!logText) {
@@ -1419,25 +1710,41 @@ async function waitForPidChange(oldPid, timeout = 5000) {
                         const updateOnStart = await run(`cat ${MODPATH}/config/update-on-start 2>/dev/null || true`);
                         const cloakingUpdate = await run(`cat ${MODPATH}/config/dnscrypt-cloaking-rules-update 2>/dev/null || true`);
                         const blockedNamesUpdate = await run(`cat ${MODPATH}/config/dnscrypt-blocked-names-update 2>/dev/null || true`);
+                        const blockedIpsUpdate = await run(`cat ${MODPATH}/config/dnscrypt-blocked-ips-update 2>/dev/null || true`);
+                        const allowedNamesUpdate = await run(`cat ${MODPATH}/config/dnscrypt-allowed-names-update 2>/dev/null || true`);
+                        const allowedIpsUpdate = await run(`cat ${MODPATH}/config/dnscrypt-allowed-ips-update 2>/dev/null || true`);
                         const bypassCalls = await run(`cat ${MODPATH}/config/bypass-calls 2>/dev/null || true`);
                         const ipv6Enable = await run(`cat ${MODPATH}/config/ipv6-enable 2>/dev/null || true`);
                         const networkTweaks = await run(`cat ${MODPATH}/config/network-tweaks 2>/dev/null || true`);
-                        const ipv4RangesLink = await run(`cat ${MODPATH}/config/ipset-v4-link 2>/dev/null || true`);
-                        const ipv6RangesLink = await run(`cat ${MODPATH}/config/ipset-v6-link 2>/dev/null || true`);
-                        const rknRegistryLink = await run(`cat ${MODPATH}/config/reestr-link 2>/dev/null || true`);
-                        const cloakingRulesLink = await run(`cat ${MODPATH}/config/dnscrypt-cloaking-rules-link 2>/dev/null || true`);
-                        const blockedNamesLink = await run(`cat ${MODPATH}/config/dnscrypt-blocked-names-link 2>/dev/null || true`);
-                        const listCustom = await run(`cat ${MODPATH}/list/custom.txt 2>/dev/null || true`);
-                        const listExclude = await run(`cat ${MODPATH}/list/exclude.txt 2>/dev/null || true`);
-                        const ipsetCustom = await run(`cat ${MODPATH}/ipset/custom.txt 2>/dev/null || true`);
-                        const ipsetExclude = await run(`cat ${MODPATH}/ipset/exclude.txt 2>/dev/null || true`);
-                        const dnscryptCustom = await run(`cat ${MODPATH}/dnscrypt/custom-cloaking-rules.txt 2>/dev/null || true`);
-                        const zapretLogs = await run(`cat ${MODPATH}/zapret/latest.log 2>/dev/null || true`);
-                        const dnscryptLogs = await run(`cat ${MODPATH}/dnscrypt/latest.log 2>/dev/null || true`);
+                        const ipv4RangesLink = await run(`cat ${MODPATH}/config/ipset-v4-link 2>/dev/null || cat ${MODPATH}/config/custom-ipv4-ranges-url 2>/dev/null || true`);
+                        const ipv6RangesLink = await run(`cat ${MODPATH}/config/ipset-v6-link 2>/dev/null || cat ${MODPATH}/config/custom-ipv6-ranges-url 2>/dev/null || true`);
+                        const rknRegistryLink = await run(`cat ${MODPATH}/config/reestr-link 2>/dev/null || cat ${MODPATH}/config/custom-rkn-registry-url 2>/dev/null || true`);
+                        const cloakingRulesLink = await run(`cat ${MODPATH}/config/dnscrypt-cloaking-rules-link 2>/dev/null || cat ${MODPATH}/config/custom-cloaking-rules-url 2>/dev/null || true`);
+                        const blockedNamesLink = await run(`cat ${MODPATH}/config/dnscrypt-blocked-names-link 2>/dev/null || cat ${MODPATH}/config/custom-blocked-names-url 2>/dev/null || true`);
+                        const blockedIpsLink = await run(`cat ${MODPATH}/config/dnscrypt-blocked-ips-link 2>/dev/null || cat ${MODPATH}/config/custom-blocked-ips-url 2>/dev/null || true`);
+                        const allowedNamesLink = await run(`cat ${MODPATH}/config/dnscrypt-allowed-names-link 2>/dev/null || cat ${MODPATH}/config/custom-allowed-names-url 2>/dev/null || true`);
+                        const allowedIpsLink = await run(`cat ${MODPATH}/config/dnscrypt-allowed-ips-link 2>/dev/null || cat ${MODPATH}/config/custom-allowed-ips-url 2>/dev/null || true`);
+                        const interfaceOnly = await run(`cat ${MODPATH}/config/interface-only 2>/dev/null || true`);
+                        const ignoreDnscrypt = await run(`cat ${MODPATH}/config/interface-ignore-dnscrypt 2>/dev/null || true`);
+                        const listCustom = await run(`cat ${MODPATH}/list/custom.txt 2>/dev/null || true`, { trim: false });
+                        const listExclude = await run(`cat ${MODPATH}/list/exclude.txt 2>/dev/null || true`, { trim: false });
+                        const ipsetCustom = await run(`cat ${MODPATH}/ipset/custom.txt 2>/dev/null || true`, { trim: false });
+                        const ipsetExclude = await run(`cat ${MODPATH}/ipset/exclude.txt 2>/dev/null || true`, { trim: false });
+                        const dnscryptCustom = await run(`cat ${MODPATH}/dnscrypt/custom-cloaking-rules.txt 2>/dev/null || true`, { trim: false });
+                        const dnscryptCustomBlockedNames = await run(`cat ${MODPATH}/dnscrypt/custom-blocked-names.txt 2>/dev/null || true`, { trim: false });
+                        const dnscryptCustomBlockedIps = await run(`cat ${MODPATH}/dnscrypt/custom-blocked-ips.txt 2>/dev/null || true`, { trim: false });
+                        const dnscryptCustomAllowedNames = await run(`cat ${MODPATH}/dnscrypt/custom-allowed-names.txt 2>/dev/null || true`, { trim: false });
+                        const dnscryptCustomAllowedIps = await run(`cat ${MODPATH}/dnscrypt/custom-allowed-ips.txt 2>/dev/null || true`, { trim: false });
+                        const zapretLogs = await run(`cat ${MODPATH}/zapret/latest.log 2>/dev/null || true`, { trim: false });
+                        const dnscryptLogs = await run(`cat ${MODPATH}/dnscrypt/latest.log 2>/dev/null || true`, { trim: false });
                         currentzapretLogText = zapretLogs;
                         currentDnscryptLogText = dnscryptLogs;
                         const moduleProp = await run(`cat ${MODPATH}/module.prop 2>/dev/null || true`);
                         const isRunning = nfqwsStatus === 'Running';
+                        const isDnscryptChecked = dnscryptEnabled === '1';
+                        const isIpv6Checked = ipv6Enable === '1';
+                        isZapretRunning = isRunning;
+                        shouldDnscryptRun = isDnscryptChecked && !isIpv6Checked;
                         updateStatusIndicator(statusNfqws, nfqwsStatus);
                         updateStatusIndicator(statusDnscrypt, dnscryptStatus);
                         if (isRunning) {
@@ -1459,21 +1766,24 @@ async function waitForPidChange(oldPid, timeout = 5000) {
                                 strategySelect.appendChild(option);
                             }
                         });
-                        let isDnscryptChecked = dnscryptEnabled === '1';
-                        const isIpv6Checked = ipv6Enable === '1';
                         toggleIpv6.checked = isIpv6Checked;
                         toggleDnscrypt.checked = isDnscryptChecked;
                         toggleRulesRecheck.checked = rulesRecheck === '1';
                         toggleUpdateOnStart.checked = updateOnStart === '1' || updateOnStart === '';
-                        toggleCloakingUpdate.checked = cloakingUpdate === '1';
-                        toggleBlockedNamesUpdate.checked = blockedNamesUpdate === '1';
                         document.getElementById('toggle-bypass-calls').checked = bypassCalls === '1';
                         document.getElementById('toggle-network-tweaks').checked = networkTweaks === '1';
                         inputIpv4Ranges.value = ipv4RangesLink;
                         inputIpv6Ranges.value = ipv6RangesLink;
                         inputRknRegistry.value = rknRegistryLink;
-                        inputCloakingRules.value = cloakingRulesLink;
-                        inputBlockedNames.value = blockedNamesLink;
+                        applyLinkToggleState('dnscrypt-cloaking-rules-update', cloakingRulesLink, cloakingUpdate);
+                        applyLinkToggleState('dnscrypt-blocked-names-update', blockedNamesLink, blockedNamesUpdate);
+                        applyLinkToggleState('dnscrypt-blocked-ips-update', blockedIpsLink, blockedIpsUpdate);
+                        applyLinkToggleState('dnscrypt-allowed-names-update', allowedNamesLink, allowedNamesUpdate);
+                        applyLinkToggleState('dnscrypt-allowed-ips-update', allowedIpsLink, allowedIpsUpdate);
+                        interfaceInput.value = interfaceOnly;
+                        lastInterfaceOnlyValue = interfaceOnly;
+                        const ignoreDnscryptEnabled = ignoreDnscrypt === '1';
+                        toggleIgnoreDnscrypt.checked = ignoreDnscryptEnabled;
                         updateDnscryptDependentFields(isDnscryptChecked, isIpv6Checked);
                         Object.keys(fileContents).forEach(path => {
                             if (!isDirty[path]) {
@@ -1485,6 +1795,10 @@ async function waitForPidChange(oldPid, timeout = 5000) {
                                     case 'ipset/custom.txt': content = ipsetCustom; break;
                                     case 'ipset/exclude.txt': content = ipsetExclude; break;
                                     case 'dnscrypt/custom-cloaking-rules.txt': content = dnscryptCustom; break;
+                                    case 'dnscrypt/custom-blocked-names.txt': content = dnscryptCustomBlockedNames; break;
+                                    case 'dnscrypt/custom-blocked-ips.txt': content = dnscryptCustomBlockedIps; break;
+                                    case 'dnscrypt/custom-allowed-names.txt': content = dnscryptCustomAllowedNames; break;
+                                    case 'dnscrypt/custom-allowed-ips.txt': content = dnscryptCustomAllowedIps; break;
                                 }
                                 textarea.value = content;
                             }
@@ -1547,10 +1861,50 @@ btnPrimary.addEventListener('click', async () => {
                         setTimeout(() => errorOverlay.classList.add('hidden'), 2000);
                     }, 50);
                 };
+                const applyNetworkRules = async () => {
+                    const restartZapret = isZapretRunning;
+                    const restartDnscryptOnly = !restartZapret && shouldDnscryptRun;
+                    if (!restartZapret && !restartDnscryptOnly) {
+                        return;
+                    }
+                    showLoading();
+                    try {
+                        await run(`sh ${MODPATH}/uninstall.sh`);
+                        await new Promise(res => setTimeout(res, 2000));
+                        if (restartZapret) {
+                            await run(`sh ${MODPATH}/service.sh`);
+                        } else if (restartDnscryptOnly) {
+                            await run(`nohup sh ${MODPATH}/dnscrypt/dnscrypt.sh >/dev/null 2>&1 &`);
+                        }
+                        await new Promise(res => setTimeout(res, 2000));
+                        await fetchData();
+                    } catch (e) {
+                        flashError();
+                        console.error(e);
+                    } finally {
+                        hideLoading();
+                    }
+                };
                 btnImportStrategy.addEventListener('click', () => {
                     importUrlInput.value = '';
                     importModalOverlay.classList.remove('hidden');
                     importUrlInput.focus();
+                });
+                btnClearDnscrypt.addEventListener('click', async () => {
+                    const originalText = btnClearDnscrypt.textContent;
+                    btnClearDnscrypt.disabled = true;
+                    btnClearDnscrypt.textContent = langData.loading || 'Загрузка...';
+                    try {
+                        await run(`/system/bin/zapret clear-dnscrypt-files`);
+                        await fetchData();
+                    } catch (e) {
+                        flashError();
+                        console.error(e);
+                    } finally {
+                        btnClearDnscrypt.disabled = false;
+                        btnClearDnscrypt.textContent = originalText;
+                        updateDnscryptDependentFields(toggleDnscrypt.checked, toggleIpv6.checked);
+                    }
                 });
                 importCancel.addEventListener('click', () => {
                     importModalOverlay.classList.add('hidden');
@@ -1591,31 +1945,104 @@ btnPrimary.addEventListener('click', async () => {
                 setupToggle(toggleDnscrypt, 'dnscrypt-enable', () => {
                     updateDnscryptDependentFields(toggleDnscrypt.checked, toggleIpv6.checked);
                 });
+                setupToggle(toggleIgnoreDnscrypt, 'interface-ignore-dnscrypt', async () => {
+                    await applyNetworkRules();
+                });
                 setupToggle(toggleRulesRecheck, 'dnscrypt-rules-fix');
                 setupToggle(toggleUpdateOnStart, 'update-on-start');
                 setupToggle(toggleCloakingUpdate, 'dnscrypt-cloaking-rules-update');
                 setupToggle(toggleBlockedNamesUpdate, 'dnscrypt-blocked-names-update');
+                setupToggle(toggleBlockedIpsUpdate, 'dnscrypt-blocked-ips-update');
+                setupToggle(toggleAllowedNamesUpdate, 'dnscrypt-allowed-names-update');
+                setupToggle(toggleAllowedIpsUpdate, 'dnscrypt-allowed-ips-update');
                 setupToggle(document.getElementById('toggle-bypass-calls'), 'bypass-calls');
                 setupToggle(toggleIpv6, 'ipv6-enable', async () => {
                     const ipv6Enabled = toggleIpv6.checked;
                     updateDnscryptDependentFields(toggleDnscrypt.checked, ipv6Enabled);
                 });
                 setupToggle(document.getElementById('toggle-network-tweaks'), 'network-tweaks');
-                const setupCustomLinkInput = (input, configName) => {
+                const setupCustomLinkInput = (input, configName, legacyNames = [], toggleElement, toggleConfigName) => {
                     input.addEventListener('blur', async () => {
                         const value = input.value.trim();
                         if (value === '') {
-                            await run(`rm -f ${MODPATH}/config/${configName}`);
+                            const commands = [`rm -f ${MODPATH}/config/${configName}`];
+                            legacyNames.forEach(name => commands.push(`rm -f ${MODPATH}/config/${name}`));
+                            if (toggleElement && toggleConfigName) {
+                                commands.push(`rm -f ${MODPATH}/config/${toggleConfigName}`);
+                            }
+                            await run(commands.join('; '));
+                            if (toggleElement && toggleConfigName) {
+                                applyLinkToggleState(toggleConfigName, '', '0');
+                                updateDnscryptDependentFields(toggleDnscrypt.checked, toggleIpv6.checked);
+                            }
                         } else {
-                            await run(`echo '${value}' > ${MODPATH}/config/${configName}`);
+                            const escapedValue = shellEscape(value);
+                            let command = `echo '${escapedValue}' > ${MODPATH}/config/${configName}`;
+                            legacyNames.forEach(name => {
+                                command += `; rm -f ${MODPATH}/config/${name}`;
+                            });
+                            await run(command);
+                            if (toggleElement && toggleConfigName) {
+                                applyLinkToggleState(toggleConfigName, value, toggleElement.checked ? '1' : '0');
+                                updateDnscryptDependentFields(toggleDnscrypt.checked, toggleIpv6.checked);
+                            }
                         }
                     });
                 };
-                setupCustomLinkInput(inputIpv4Ranges, 'custom-ipv4-ranges-url');
-                setupCustomLinkInput(inputIpv6Ranges, 'custom-ipv6-ranges-url');
-                setupCustomLinkInput(inputRknRegistry, 'custom-rkn-registry-url');
-                setupCustomLinkInput(inputCloakingRules, 'custom-cloaking-rules-url');
-                setupCustomLinkInput(inputBlockedNames, 'custom-blocked-names-url');
+                setupCustomLinkInput(inputIpv4Ranges, 'ipset-v4-link', ['custom-ipv4-ranges-url']);
+                setupCustomLinkInput(inputIpv6Ranges, 'ipset-v6-link', ['custom-ipv6-ranges-url']);
+                setupCustomLinkInput(inputRknRegistry, 'reestr-link', ['custom-rkn-registry-url']);
+                setupCustomLinkInput(inputCloakingRules, 'dnscrypt-cloaking-rules-link', ['custom-cloaking-rules-url'], toggleCloakingUpdate, 'dnscrypt-cloaking-rules-update');
+                setupCustomLinkInput(inputBlockedNames, 'dnscrypt-blocked-names-link', ['custom-blocked-names-url'], toggleBlockedNamesUpdate, 'dnscrypt-blocked-names-update');
+                setupCustomLinkInput(inputBlockedIps, 'dnscrypt-blocked-ips-link', ['custom-blocked-ips-url'], toggleBlockedIpsUpdate, 'dnscrypt-blocked-ips-update');
+                setupCustomLinkInput(inputAllowedNames, 'dnscrypt-allowed-names-link', ['custom-allowed-names-url'], toggleAllowedNamesUpdate, 'dnscrypt-allowed-names-update');
+                setupCustomLinkInput(inputAllowedIps, 'dnscrypt-allowed-ips-link', ['custom-allowed-ips-url'], toggleAllowedIpsUpdate, 'dnscrypt-allowed-ips-update');
+                const interfaceNamePattern = /^[A-Za-z0-9_.:-]{1,15}$/;
+                const clearInterfaceSetting = async () => {
+                    interfaceInput.value = '';
+                    if (lastInterfaceOnlyValue === '') {
+                        return;
+                    }
+                    try {
+                        await run(`rm -f ${MODPATH}/config/interface-only`);
+                        lastInterfaceOnlyValue = '';
+                        await applyNetworkRules();
+                    } catch (e) {
+                        flashError();
+                        console.error(e);
+                    }
+                };
+                interfaceInput.addEventListener('blur', async () => {
+                    const value = interfaceInput.value.trim();
+                    interfaceInput.value = value;
+                    if (value === '') {
+                        await clearInterfaceSetting();
+                        return;
+                    }
+                    if (!interfaceNamePattern.test(value)) {
+                        await clearInterfaceSetting();
+                        return;
+                    }
+                    try {
+                        await run(`ip link show ${value}`);
+                    } catch (e) {
+                        await clearInterfaceSetting();
+                        return;
+                    }
+                    if (value === lastInterfaceOnlyValue) {
+                        interfaceInput.value = value;
+                        return;
+                    }
+                    try {
+                        await run(`echo '${value}' > ${MODPATH}/config/interface-only`);
+                        interfaceInput.value = value;
+                        lastInterfaceOnlyValue = value;
+                        await applyNetworkRules();
+                    } catch (e) {
+                        flashError();
+                        console.error(e);
+                    }
+                });
                 document.querySelectorAll('.btn-save').forEach(button => {
                     button.addEventListener('click', async () => {
                         const path = button.dataset.path;
@@ -1635,18 +2062,10 @@ btnPrimary.addEventListener('click', async () => {
                         }
                     });
                 });
-                const listButtons = document.querySelectorAll('.list-btn');
-                const tabContents = document.querySelectorAll('.tab-content');
                 listButtons.forEach(button => {
                     button.addEventListener('click', () => {
-                        listButtons.forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                        const targetTabId = button.dataset.tab;
-                        const target = document.getElementById(targetTabId);
-                        tabContents.forEach(content => content.classList.remove('active'));
-                        if (target) {
-                            target.classList.add('active');
-                        }
+                        if (button.disabled || button.classList.contains('disabled')) return;
+                        activateTab(button);
                     });
                 });
                 const allButtons = document.querySelectorAll('.btn, .list-btn');

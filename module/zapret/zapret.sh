@@ -3,6 +3,18 @@
 MODPATH="/data/adb/modules/zapret"
 CURRENTSTRATEGY=$(cat "$MODPATH/config/current-strategy")
 . "$MODPATH/strategy/$CURRENTSTRATEGY.sh"
+INTERFACE_ONLY=$(cat "$MODPATH/config/interface-only" 2>/dev/null || echo "")
+if [ -n "$INTERFACE_ONLY" ]; then
+    IPTABLES_IFACE_IN="-i $INTERFACE_ONLY"
+    IPTABLES_IFACE_OUT="-o $INTERFACE_ONLY"
+    IP6TABLES_IFACE_IN="-i $INTERFACE_ONLY"
+    IP6TABLES_IFACE_OUT="-o $INTERFACE_ONLY"
+else
+    IPTABLES_IFACE_IN=""
+    IPTABLES_IFACE_OUT=""
+    IP6TABLES_IFACE_IN=""
+    IP6TABLES_IFACE_OUT=""
+fi
 sysctl net.netfilter.nf_conntrack_tcp_be_liberal=1 > /dev/null 2>&1 &
 if echo "$config" | grep -q 'badsum'; then
     sysctl net.netfilter.nf_conntrack_checksum=0 > /dev/null 2>&1 &
@@ -12,13 +24,13 @@ tcp_ports="$(echo $config | grep -oE 'filter-tcp=[0-9,-]+' | sed -e 's/.*=//g' -
 udp_ports="$(echo $config | grep -oE 'filter-udp=[0-9,-]+' | sed -e 's/.*=//g' -e 's/,/\n/g' -e 's/ /,/g' | sort -un)";
 iptAdd() {
     iptDPort="$iMportD $2"; iptSPort="$iMportS $2";
-    iptables -t mangle -I POSTROUTING -p $1 $iptDPort $iCBo $iMark -j NFQUEUE --queue-num 200 --queue-bypass
-    iptables -t mangle -I PREROUTING -p $1 $iptSPort $iCBr $iMark -j NFQUEUE --queue-num 200 --queue-bypass
+    iptables -t mangle -I POSTROUTING $IPTABLES_IFACE_OUT -p $1 $iptDPort $iCBo $iMark -j NFQUEUE --queue-num 200 --queue-bypass
+    iptables -t mangle -I PREROUTING $IPTABLES_IFACE_IN -p $1 $iptSPort $iCBr $iMark -j NFQUEUE --queue-num 200 --queue-bypass
 }
 ip6tAdd() {
     ip6tDPort="$i6MportD $2"; ip6tSPort="$i6MportS $2";
-    ip6tables -t mangle -I POSTROUTING -p $1 $ip6tDPort $i6CBo $i6Mark -j NFQUEUE --queue-num 200 --queue-bypass
-    ip6tables -t mangle -I PREROUTING -p $1 $ip6tSPort $i6CBr $i6Mark -j NFQUEUE --queue-num 200 --queue-bypass
+    ip6tables -t mangle -I POSTROUTING $IP6TABLES_IFACE_OUT -p $1 $ip6tDPort $i6CBo $i6Mark -j NFQUEUE --queue-num 200 --queue-bypass
+    ip6tables -t mangle -I PREROUTING $IP6TABLES_IFACE_IN -p $1 $ip6tSPort $i6CBr $i6Mark -j NFQUEUE --queue-num 200 --queue-bypass
 }
 addMultiPort() {
     for current_port in $2; do
@@ -36,11 +48,11 @@ addMultiPort() {
         esac
     done
 }
-if [ "$(cat /proc/net/ip_tables_targets | grep -c 'NFQUEUE')" == "0" ]; then
+if [ "$(cat /proc/net/ip_tables_targets | grep -c 'NFQUEUE')" = "0" ]; then
     echo "iptables is bad!"
     exit
 fi
-if [ "$(cat /proc/net/ip6_tables_targets | grep -c 'NFQUEUE')" == "0" ]; then
+if [ "$(cat /proc/net/ip6_tables_targets | grep -c 'NFQUEUE')" = "0" ]; then
     echo "ip6tables is bad!"
     exit
 fi

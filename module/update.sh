@@ -12,11 +12,26 @@ ZAPRETIPSETSDIR="$MODPATH/ipset"
 IPV6ENABLE=$(cat "$MODPATH/config/ipv6-enable" 2>/dev/null || echo "0")
 CLOAKINGUPDATE=$(cat "$MODPATH/config/dnscrypt-cloaking-rules-update" 2>/dev/null || echo "0")
 BLOCKEDUPDATE=$(cat "$MODPATH/config/dnscrypt-blocked-names-update" 2>/dev/null || echo "0")
-DNSCRYPTFILES_cloaking_rules=$(cat "$MODPATH/config/dnscrypt-cloaking-rules-link" 2>/dev/null || echo "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/cloaking-rules.txt")
-DNSCRYPTFILES_blocked_names=$(cat "$MODPATH/config/dnscrypt-blocked-names-link" 2>/dev/null || echo "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/blocked-yandex.txt")
-CUSTOMLINKIPSETV4=$(cat "$MODPATH/config/ipset-v4-link" 2>/dev/null || echo "https://raw.githubusercontent.com/sevcator/zapret-lists/refs/heads/main/ipset-v4.txt")
-CUSTOMLINKIPSETV6=$(cat "$MODPATH/config/ipset-v6-link" 2>/dev/null || echo "https://raw.githubusercontent.com/sevcator/zapret-lists/refs/heads/main/ipset-v6.txt")
-CUSTOMLINKREESTR=$(cat "$MODPATH/config/reestr-link" 2>/dev/null || echo "https://raw.githubusercontent.com/sevcator/zapret-lists/refs/heads/main/reestr_filtered.txt")
+BLOCKEDIPSUPDATE=$(cat "$MODPATH/config/dnscrypt-blocked-ips-update" 2>/dev/null || echo "0")
+read_link_config() {
+    default_value="$1"
+    shift
+    for name in "$@"; do
+        file="$MODPATH/config/$name"
+        if [ -f "$file" ] && grep -q '[^[:space:]]' "$file" 2>/dev/null; then
+            cat "$file"
+            return
+        fi
+    done
+    printf '%s\n' "$default_value"
+}
+
+DNSCRYPTFILES_cloaking_rules=$(read_link_config "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/cloaking-rules.txt" dnscrypt-cloaking-rules-link custom-cloaking-rules-url)
+DNSCRYPTFILES_blocked_names=$(read_link_config "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/blocked-yandex.txt" dnscrypt-blocked-names-link custom-blocked-names-url)
+DNSCRYPTFILES_blocked_ips=$(read_link_config "https://raw.githubusercontent.com/sevcator/dnscrypt-proxy-stuff/refs/heads/main/blocked-ips.txt" dnscrypt-blocked-ips-link custom-blocked-ips-url)
+CUSTOMLINKIPSETV4=$(read_link_config "https://raw.githubusercontent.com/sevcator/zapret-lists/refs/heads/main/ipset-v4.txt" ipset-v4-link custom-ipv4-ranges-url)
+CUSTOMLINKIPSETV6=$(read_link_config "https://raw.githubusercontent.com/sevcator/zapret-lists/refs/heads/main/ipset-v6.txt" ipset-v6-link custom-ipv6-ranges-url)
+CUSTOMLINKREESTR=$(read_link_config "https://raw.githubusercontent.com/sevcator/zapret-lists/refs/heads/main/reestr_filtered.txt" reestr-link custom-rkn-registry-url)
 
 PREDEFINED_LIST_FILES="reestr.txt default.txt google.txt"
 PREDEFINED_IPSET_FILES="ipset-v4.txt ipset-v6.txt"
@@ -31,6 +46,37 @@ get_overwrite_url() {
         "ipset-v6.txt") echo "$CUSTOMLINKIPSETV6" ;;
         *) echo "" ;;
     esac
+}
+
+get_dnscrypt_filename() {
+    url="$1"
+    stripped="${url%%\?*}"
+    stripped="${stripped%%#*}"
+    basename "${stripped}"
+}
+
+resolve_dnscrypt_target() {
+    name="$1"
+    case "$name" in
+        cloaking-rules.txt) echo "$DNSCRYPTLISTSDIR/cloaking-rules.txt" ;;
+        blocked-ips.txt) echo "$DNSCRYPTLISTSDIR/blocked-ips.txt" ;;
+        allowed-names.txt) echo "$DNSCRYPTLISTSDIR/custom-allowed-names.txt" ;;
+        allowed-ips.txt) echo "$DNSCRYPTLISTSDIR/custom-allowed-ips.txt" ;;
+        *) return 1 ;;
+    esac
+}
+
+update_dnscrypt_file_from_link() {
+    link="$1"
+    [ -n "$link" ] || return 1
+    name=$(get_dnscrypt_filename "$link")
+    target=$(resolve_dnscrypt_target "$name" 2>/dev/null)
+    if [ -z "$target" ]; then
+        name=${name:-unknown}
+        echo "[ $name ] Unsupported"
+        return 1
+    fi
+    update_file "$target" "$link"
 }
 
 update_file() {
@@ -107,17 +153,18 @@ update_dir() {
 }
 
 if [ "$IPV6ENABLE" != "1" ]; then
-    . "$MODPATH/dnscrypt/custom-cloaking-rules.sh" disappend > /dev/null 2>&1 &
+    sh "$MODPATH/dnscrypt/custom-files.sh" disappend > /dev/null 2>&1 &
     sleep 2
 fi
 
 update_dir "$ZAPRETLISTSDIR" "$ZAPRETLISTSDEFAULTLINK" "$PREDEFINED_LIST_FILES"
 update_dir "$ZAPRETIPSETSDIR" "$ZAPRETIPSETSDEFAULTLINK" "$PREDEFINED_IPSET_FILES"
 
-[ "$IPV6ENABLE" != "1" ] && [ "$CLOAKINGUPDATE" = "1" ] && update_file "$DNSCRYPTLISTSDIR/cloaking-rules.txt" "$DNSCRYPTFILES_cloaking_rules"
+[ "$IPV6ENABLE" != "1" ] && [ "$CLOAKINGUPDATE" = "1" ] && update_dnscrypt_file_from_link "$DNSCRYPTFILES_cloaking_rules"
 [ "$IPV6ENABLE" != "1" ] && [ "$BLOCKEDUPDATE" = "1" ] && update_file "$DNSCRYPTLISTSDIR/blocked-names.txt" "$DNSCRYPTFILES_blocked_names"
+[ "$IPV6ENABLE" != "1" ] && [ "$BLOCKEDIPSUPDATE" = "1" ] && update_dnscrypt_file_from_link "$DNSCRYPTFILES_blocked_ips"
 
 if [ "$IPV6ENABLE" != "1" ]; then
-    . "$MODPATH/dnscrypt/custom-cloaking-rules.sh" append > /dev/null 2>&1 &
+    sh "$MODPATH/dnscrypt/custom-files.sh" append > /dev/null 2>&1 &
     sleep 2
 fi
